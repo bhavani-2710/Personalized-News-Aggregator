@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Menu } from 'lucide-react';
+import { Menu, Book, Clock, User, LogOut } from 'lucide-react';
 
 const Sidebar = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -9,8 +9,6 @@ const Sidebar = () => {
     switch (selectedSection) {
       case 'source':
         return <div>Here are the sources of news.</div>;
-      case 'all-news':
-        return <div>Displaying all news articles.</div>;
       case 'latest-news':
         return <div>Showing the latest news.</div>;
       default:
@@ -22,48 +20,50 @@ const Sidebar = () => {
     <div className="h-screen flex">
       {/* Sidebar */}
       <div
-        className={`fixed top-0 left-0 h-full bg-gray-100 shadow-md transition-transform transform ${
+        className={`fixed top-0 left-0 h-full bg-black text-white shadow-lg transition-transform transform ${
           isOpen ? 'translate-x-0' : '-translate-x-full'
-        } w-64 p-4 z-50`}
+        } w-64 z-50`}
       >
-        <h2 className="text-xl font-bold mb-6 border-b pb-2">News Aggregator</h2>
-        <ul className="space-y-4">
-          <li key="source">
+        <h2 className="text-2xl font-bold mb-6 p-4 border-b border-gray-600">News Aggregator</h2>
+        <ul className="space-y-2 p-4">
+          <li>
             <button
               onClick={() => setSelectedSection('source')}
-              className={`block text-gray-800 ${
-                selectedSection === 'source' ? 'bg-gray-200' : 'hover:bg-gray-200'
-              } p-3 rounded flex items-center space-x-2`}
+              className={`flex items-center gap-3 w-full text-left p-3 rounded-lg transition-colors ${
+                selectedSection === 'source' ? 'bg-gray-700' : 'hover:bg-gray-700'
+              }`}
             >
-              <span>📚</span>
+              <Book className="w-5 h-5" />
               <span>Source</span>
             </button>
           </li>
-          <li key="all-news">
-            <button
-              onClick={() => setSelectedSection('all-news')}
-              className={`block text-gray-800 ${
-                selectedSection === 'all-news' ? 'bg-gray-200' : 'hover:bg-gray-200'
-              } p-3 rounded flex items-center space-x-2`}
-            >
-              <span>📰</span>
-              <span>All News</span>
-            </button>
-          </li>
-          <li key="latest-news">
+          <li>
             <button
               onClick={() => setSelectedSection('latest-news')}
-              className={`block text-gray-800 ${
-                selectedSection === 'latest-news' ? 'bg-gray-200' : 'hover:bg-gray-200'
-              } p-3 rounded flex items-center space-x-2`}
+              className={`flex items-center gap-3 w-full text-left p-3 rounded-lg transition-colors ${
+                selectedSection === 'latest-news' ? 'bg-gray-700' : 'hover:bg-gray-700'
+              }`}
             >
-              <span>⏰</span>
+              <Clock className="w-5 h-5" />
               <span>Latest News</span>
             </button>
           </li>
         </ul>
-        <div className="mt-8 border-t pt-4">
-          <p className="text-gray-600 text-sm">More Features Coming Soon!</p>
+        <div className="absolute bottom-4 left-4 right-4 border-t border-gray-600 pt-4">
+          <div className="flex items-center gap-3 mb-4">
+            <User className="w-5 h-5" />
+            <div>
+              <p className="font-bold">Profile</p>
+              <p className="text-sm">user@example.com</p>
+            </div>
+          </div>
+          <button
+            onClick={() => alert('Logging out...')}
+            className="flex items-center gap-3 w-full bg-red-500 text-white p-3 rounded-lg hover:bg-red-600"
+          >
+            <LogOut className="w-5 h-5" />
+            <span>Log Out</span>
+          </button>
         </div>
       </div>
 
@@ -77,15 +77,17 @@ const Sidebar = () => {
           }
         }}
       >
-        <button
-          onClick={(e) => {
-            e.stopPropagation();
-            setIsOpen(!isOpen);
-          }}
-          className="absolute top-4 left-4 bg-gray-800 text-white p-2 rounded focus:outline-none z-50"
-        >
-          <Menu size={24} />
-        </button>
+        {!isOpen && (
+          <button
+            onClick={(e) => {
+              e.stopPropagation();
+              setIsOpen(!isOpen);
+            }}
+            className="absolute top-4 left-4 bg-gray-800 text-white p-2 rounded-full focus:outline-none z-50 shadow-lg"
+          >
+            <Menu size={24} />
+          </button>
+        )}
         <div className="p-4">{renderContent()}</div>
       </div>
     </div>
