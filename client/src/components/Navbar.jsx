@@ -33,12 +33,12 @@ const Navbar = () => {
             <form className="relative w-full  ">
               <input
                 type="text"
-                className="w-200 rounded-full border-gray-300 bg-gray-700 text-gray-200 placeholder-gray-400 py-2 pl-100 pr-4 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500 focus:outline-none"
+                className="w-120 rounded-full border-gray-300 bg-gray-700 text-gray-200 placeholder-gray-400 py-2 pl-10 pr-4 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500 focus:outline-none"
                 placeholder="Search trending news..."
               />
               <button
                 type="submit"
-                className="absolute right-2 top-1/2 -translate-y-1/2 bg-indigo-600 text-white rounded-full px-3 py-1 hover:bg-indigo-700 mr-75"
+                className="absolute right-2 top-1/2 -translate-y-1/2 bg-indigo-600 text-white rounded-full px-3 py-2 hover:bg-indigo-700 mr-75"
               >
                 Search
               </button>
