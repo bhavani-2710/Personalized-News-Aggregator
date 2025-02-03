@@ -1,19 +1,18 @@
 import React, { useEffect, useState } from "react";
 
-const API_URL = "https://newsdata.io/api/1/sources?country=in&apikey=pub_669201d855deafa415ee593c86cf6feade4a7";
+const API_URL = "https://newsdata.io/api/1/sources?country=in&apikey=pub_66920f1da3317060c541d77964cfde57742ba";
 
 const Card = ({ article }) => {
   return (
-    <div className="bg-gray-900 text-white p-6 rounded-3xl shadow-lg w-full md:w-1/3 h-auto overflow-hidden border border-gray-700">
-      {/* Display the icon if available, else fallback to a placeholder */}
+    <div className="bg-gray-900 text-white p-5 rounded-2xl shadow-lg w-full md:w-1/3 overflow-hidden">
       <img
-        src={article.icon || "https://via.placeholder.com/300x200"}
+        src={article.image_url && article.image_url !== "" ? article.image_url : "https://via.placeholder.com/300x150"}
         alt={article.name}
-        className="w-full h-48 object-cover rounded-xl border border-gray-600"
+        className="w-full h-40 object-cover rounded-xl"
       />
-      <h2 className="text-xl font-bold mt-4 truncate">{article.name}</h2>
-      <p className="text-gray-400 text-sm mt-3 line-clamp-3">{article.description || "No description available."}</p>
-      <p className="text-gray-300 text-xs mt-3 truncate">
+      <h2 className="text-xl font-bold mt-3 truncate">{article.name}</h2>
+      <p className="text-gray-400 text-sm mt-2 line-clamp-3">{article.description || "No description available."}</p>
+      <p className="text-gray-300 text-xs mt-2 truncate">
         Category: <span className="font-semibold">{article.category || "Unknown"}</span>
       </p>
       <p className="text-gray-400 text-xs truncate">Country: {article.country || "Unknown"}</p>
@@ -31,12 +30,7 @@ const App = () => {
     fetch(API_URL)
       .then((response) => response.json())
       .then((data) => {
-        if (data && Array.isArray(data.results)) {
-          const filteredArticles = data.results.filter((article) => article.icon);
-          setArticles(filteredArticles);
-        } else {
-          setError("Invalid data format received");
-        }
+        setArticles(data.results || []);
         setLoading(false);
       })
       .catch((err) => {
