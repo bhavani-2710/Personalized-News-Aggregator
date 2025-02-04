@@ -1,3 +1,4 @@
+import React from "react";
 import React, { useEffect, useState } from "react";
 import { BrowserRouter as Router, Route, Routes, useNavigate, useParams } from "react-router-dom";
 
@@ -33,6 +34,7 @@ const ArticlePage = ({ articles }) => {
   );
 };
 
+export default Card;
 const App = () => {
   const [articles, setArticles] = useState([]);
   const [loading, setLoading] = useState(true);

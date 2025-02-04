@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Menu, Book, Clock, User, LogOut } from 'lucide-react';
+import { NavLink } from 'react-router-dom';
 
 const Sidebar = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -34,7 +35,7 @@ const Sidebar = () => {
               }`}
             >
               <Book className="w-5 h-5" />
-              <span>Source</span>
+              <NavLink to={'/source'}>Source</NavLink>
             </button>
           </li>
           <li>
@@ -45,7 +46,7 @@ const Sidebar = () => {
               }`}
             >
               <Clock className="w-5 h-5" />
-              <span>Latest News</span>
+              <NavLink to={'/latest-news'}>Latest News</NavLink>
             </button>
           </li>
         </ul>
