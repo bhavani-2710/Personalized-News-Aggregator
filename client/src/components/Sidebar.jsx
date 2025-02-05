@@ -89,7 +89,7 @@ const Sidebar = () => {
             <Menu size={24} />
           </button>
         )}
-        <div className="p-4">{renderContent()}</div>
+        {/* <div className="p-4">{renderContent()}</div> */}
       </div>
     </div>
   );
