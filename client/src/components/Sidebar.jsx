@@ -1,10 +1,16 @@
 import React, { useState } from 'react';
 import { Menu, Book, Clock, User, LogOut } from 'lucide-react';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
 
 const Sidebar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [selectedSection, setSelectedSection] = useState('');
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    alert('Logging out...');
+    navigate('/login');
+  };
 
   const renderContent = () => {
     switch (selectedSection) {
@@ -19,7 +25,6 @@ const Sidebar = () => {
 
   return (
     <div className="h-screen flex">
-      {/* Sidebar */}
       <div
         className={`fixed top-0 left-0 h-full bg-black text-white shadow-lg transition-transform transform ${
           isOpen ? 'translate-x-0' : '-translate-x-full'
@@ -59,7 +64,7 @@ const Sidebar = () => {
             </div>
           </div>
           <button
-            onClick={() => alert('Logging out...')}
+            onClick={handleLogout}
             className="flex items-center gap-3 w-full bg-red-500 text-white p-3 rounded-lg hover:bg-red-600"
           >
             <LogOut className="w-5 h-5" />
@@ -68,7 +73,6 @@ const Sidebar = () => {
         </div>
       </div>
 
-      {/* Main Content */}
       <div
         className={`flex-grow transition-all duration-300 ${isOpen ? 'ml-64' : 'ml-0'}`}
         onClick={(e) => {
