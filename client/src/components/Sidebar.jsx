@@ -19,7 +19,7 @@ const Sidebar = () => {
 
   return (
     <>
-      {/* <div className="h-screen flex"> */}
+      <div className="h-5 flex">
       {/* Sidebar */}
       <div
         className={`fixed top-0 left-0 h-full bg-black text-white shadow-lg transition-transform transform ${
@@ -30,7 +30,7 @@ const Sidebar = () => {
           News Aggregator
         </h2>
         <ul className="space-y-2 p-4">
-          <li>
+          <NavLink to={"/source"}>
             <button
               onClick={() => setSelectedSection("source")}
               className={`flex items-center gap-3 w-full text-left p-3 rounded-lg transition-colors ${
@@ -40,10 +40,10 @@ const Sidebar = () => {
               }`}
             >
               <Book className="w-5 h-5" />
-              <NavLink to={"/source"}>Source</NavLink>
+              <p>Source</p>
             </button>
-          </li>
-          <li>
+          </NavLink>
+          <NavLink to={"/latest-news"}>
             <button
               onClick={() => setSelectedSection("latest-news")}
               className={`flex items-center gap-3 w-full text-left p-3 rounded-lg transition-colors ${
@@ -53,9 +53,9 @@ const Sidebar = () => {
               }`}
             >
               <Clock className="w-5 h-5" />
-              <NavLink to={"/latest-news"}>Latest News</NavLink>
+              <p>Latest News</p>
             </button>
-          </li>
+          </NavLink>
         </ul>
         <div className="absolute bottom-4 left-4 right-4 border-t border-gray-600 pt-4">
           <div className="flex items-center gap-3 mb-4">
@@ -100,7 +100,7 @@ const Sidebar = () => {
         )}
         {/* <div className="p-4">{renderContent()}</div> */}
       </div>
-      {/* </div> */}
+      </div>
     </>
   );
 };
