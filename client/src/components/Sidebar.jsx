@@ -14,9 +14,9 @@ const Sidebar = () => {
 
   const renderContent = () => {
     switch (selectedSection) {
-      case 'source':
+      case "source":
         return <div>Here are the sources of news.</div>;
-      case 'latest-news':
+      case "latest-news":
         return <div>Showing the latest news.</div>;
       default:
         return <div>Select a section to view content.</div>;
@@ -27,33 +27,39 @@ const Sidebar = () => {
     <div className="h-screen flex">
       <div
         className={`fixed top-0 left-0 h-full bg-black text-white shadow-lg transition-transform transform ${
-          isOpen ? 'translate-x-0' : '-translate-x-full'
+          isOpen ? "translate-x-0" : "-translate-x-full"
         } w-64 z-50`}
       >
-        <h2 className="text-2xl font-bold mb-6 p-4 border-b border-gray-600">News Aggregator</h2>
+        <h2 className="text-2xl font-bold mb-6 p-4 border-b border-gray-600">
+          News Aggregator
+        </h2>
         <ul className="space-y-2 p-4">
-          <li>
+          <NavLink to={"/source"}>
             <button
-              onClick={() => setSelectedSection('source')}
+              onClick={() => setSelectedSection("source")}
               className={`flex items-center gap-3 w-full text-left p-3 rounded-lg transition-colors ${
-                selectedSection === 'source' ? 'bg-gray-700' : 'hover:bg-gray-700'
+                selectedSection === "source"
+                  ? "bg-gray-700"
+                  : "hover:bg-gray-700"
               }`}
             >
               <Book className="w-5 h-5" />
-              <NavLink to={'/source'}>Source</NavLink>
+              <p>Source</p>
             </button>
-          </li>
-          <li>
+          </NavLink>
+          <NavLink to={"/latest-news"}>
             <button
-              onClick={() => setSelectedSection('latest-news')}
+              onClick={() => setSelectedSection("latest-news")}
               className={`flex items-center gap-3 w-full text-left p-3 rounded-lg transition-colors ${
-                selectedSection === 'latest-news' ? 'bg-gray-700' : 'hover:bg-gray-700'
+                selectedSection === "latest-news"
+                  ? "bg-gray-700"
+                  : "hover:bg-gray-700"
               }`}
             >
               <Clock className="w-5 h-5" />
-              <NavLink to={'/latest-news'}>Latest News</NavLink>
+              <p>Latest News</p>
             </button>
-          </li>
+          </NavLink>
         </ul>
         <div className="absolute bottom-4 left-4 right-4 border-t border-gray-600 pt-4">
           <div className="flex items-center gap-3 mb-4">
@@ -74,7 +80,9 @@ const Sidebar = () => {
       </div>
 
       <div
-        className={`flex-grow transition-all duration-300 ${isOpen ? 'ml-64' : 'ml-0'}`}
+        className={`flex-grow transition-all duration-300 ${
+          isOpen ? "ml-64" : "ml-0"
+        }`}
         onClick={(e) => {
           if (isOpen) {
             e.stopPropagation();
@@ -93,9 +101,10 @@ const Sidebar = () => {
             <Menu size={24} />
           </button>
         )}
-        <div className="p-4">{renderContent()}</div>
+        {/* <div className="p-4">{renderContent()}</div> */}
       </div>
-    </div>
+      </div>
+    </>
   );
 };
 

@@ -2,14 +2,15 @@ import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import "./index.css";
 import App from "./App.jsx";
+import Layout from "./Layout.jsx";
+import Home from "./pages/Home.jsx";
+import LatestNews from "./pages/LatestNews.jsx";
 import {
   createBrowserRouter,
   createRoutesFromElements,
   Route,
   RouterProvider,
 } from "react-router-dom";
-import Layout from "./Layout.jsx";
-import Home from "./pages/Home.jsx";
 import Source from "./pages/Source.jsx";
 import LatestNews from "./pages/LatestNews.jsx";
 import Login from './pages/Login';
