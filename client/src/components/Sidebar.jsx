@@ -104,7 +104,6 @@ const Sidebar = () => {
         {/* <div className="p-4">{renderContent()}</div> */}
       </div>
       </div>
-    </>
   );
 };
 
