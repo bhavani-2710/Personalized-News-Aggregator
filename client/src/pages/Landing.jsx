@@ -53,7 +53,7 @@ function Landing() {
         <div className="max-w-6xl mx-auto px-4">
           <h2 className="text-3xl font-bold text-center text-gray-800 mb-16">Why Choose NewsHub?</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12">
-            <FeatureCard icon={<Globe className="w-8 h-8 text-yellow-950" />} title="Global Coverage" description="Access news from thousands of sources worldwide, all in one platform." />
+            <FeatureCard icon={<Globe className="w-8 h-8 text-yellow-950" />} title="Nationwide News Coverage" description="Access news from thousands of sources across India, all in one platform." />
             <FeatureCard icon={<Search className="w-8 h-8 text-yellow-950" />} title="Smart Filtering" description="Our AI helps you find the news that matters most to you." />
             <FeatureCard icon={<BookOpen className="w-8 h-8 text-yellow-950" />} title="Easy Reading" description="Clean, distraction-free reading experience optimized for all devices." />
           </div>
