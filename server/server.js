@@ -1,9 +1,10 @@
 const express = require('express')
 const cors = require("cors");
-const axios = require("axios");
 require("dotenv").config();
 const morgan = require('morgan');
+const connectDB = require('./config/db')
 const newsRouter = require('./routes/newsRoutes');
+const authRoutes = require('./routes/authRoutes')
 
 const app = express();
 
@@ -12,8 +13,11 @@ app.use(express.json());
 app.use(cors());
 app.use(morgan('dev'))
 
+connectDB()
+
 // Routes
 app.use('/news', newsRouter)
+app.use('/users', authRoutes)
 
 // Testing
 app.get('/', (req, res) => {
