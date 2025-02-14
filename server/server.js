@@ -5,6 +5,7 @@ const morgan = require('morgan');
 const connectDB = require('./config/db')
 const newsRouter = require('./routes/newsRoutes');
 const authRoutes = require('./routes/authRoutes')
+const historyRoutes = require('./routes/historyRoutes')
 
 const app = express();
 
@@ -18,6 +19,7 @@ connectDB()
 // Routes
 app.use('/news', newsRouter)
 app.use('/users', authRoutes)
+app.use('/history', historyRoutes)
 
 // Testing
 app.get('/', (req, res) => {
