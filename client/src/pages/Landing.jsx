@@ -25,8 +25,8 @@ function Landing() {
             </div>
         
           <div className="space-x-6">
-            <button className="text-white hover:bg-yellow-600 rounded-full p-2.5 font-bold text-lg transition-colors duration-300">Sign In</button>
-            <button className="bg-white text-yellow-950 font-bold text-lg px-4 py-2 rounded-lg hover:bg-yellow-600 transition-transform transform hover:scale-105">
+            <button className="text-white hover:bg-yellow-600 rounded-full p-2.5 font-bold text-lg transition-colors duration-300 cursor-pointer">Sign In</button>
+            <button className="bg-white text-yellow-950 font-bold text-lg px-4 py-2 rounded-lg hover:bg-yellow-600 transition-transform transform hover:scale-105 cursor-pointer">
               Get Started
             </button>
           </div>
@@ -40,7 +40,7 @@ function Landing() {
               Stay informed with personalized news from thousands of sources, all curated just for you.
             </p>
             <div className="flex justify-center">
-              <button className="bg-white text-yellow-950 font-bold px-8 py-3 rounded-lg text-xl hover:bg-yellow-600 transition-transform transform hover:scale-105">
+              <button className="bg-white text-yellow-950 font-bold px-8 py-3 rounded-lg text-xl hover:bg-yellow-600 transition-transform transform hover:scale-105 cursor-pointer">
                 Start Reading
               </button>
             </div>
@@ -65,7 +65,7 @@ function Landing() {
         <div className="max-w-4xl mx-auto text-center px-4">
           <h2 className="text-3xl font-bold mb-4">Ready to Transform Your News Experience?</h2>
           <p className="mb-8">Join thousands of readers who trust NewsHub for their daily news updates.</p>
-          <button className="bg-white text-yellow-950 font-bold px-8 py-3 rounded-lg text-lg hover:bg-yellow-600 transition-transform transform hover:scale-105">
+          <button className="bg-white text-yellow-950 font-bold px-8 py-3 rounded-lg text-lg hover:bg-yellow-600 transition-transform transform hover:scale-105 cursor-pointer">
             Sign Up Now
           </button>
         </div>
