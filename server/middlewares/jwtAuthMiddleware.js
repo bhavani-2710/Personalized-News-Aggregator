@@ -1,4 +1,6 @@
-import jwt from "jsonwebtoken";
+(async () => {
+  const jwt = await import('jsonwebtoken');
+})();
 
 const jwtAuthMiddleware = (req, res, next) => {
   const token = req.header("Authorization");
