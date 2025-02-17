@@ -116,7 +116,7 @@ const Register = () => {
 
           <button
             type="submit"
-            className={`w-full py-2 rounded-lg text-white text-lg font-bold transition duration-300 ${loading ? "bg-gray-400 cursor-not-allowed" : "bg-yellow-600 hover:bg-yellow-700"}`}
+            className={`w-full py-2 rounded-lg text-white text-lg font-bold transition duration-300 cursor-pointer ${loading ? "bg-gray-400 cursor-not-allowed" : "bg-yellow-600 hover:bg-yellow-700"}`}
             disabled={loading}
           >
             {loading ? "Registering..." : "Register"}
@@ -126,17 +126,17 @@ const Register = () => {
         <div className="text-center text-gray-700 my-6">OR</div>
 
         <div className="flex justify-center space-x-4">
-          <button className="flex items-center space-x-2 bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition duration-300">
+        <button className="flex items-center space-x-2 bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition duration-300 cursor-pointer">
             <FaGoogle /> <span>Google</span>
           </button>
-          <button className="flex items-center space-x-2 bg-blue-800 text-white px-4 py-2 rounded-lg hover:bg-blue-900 transition duration-300">
+          <button className="flex items-center space-x-2 bg-blue-800 text-white px-4 py-2 rounded-lg hover:bg-blue-900 transition duration-300 cursor-pointer">
             <FaFacebook /> <span>Facebook</span>
           </button>
         </div>
 
         <p className="text-center text-gray-700 mt-6">
           Already have an account? {" "}
-          <Link to="/login" className="text-yellow-600 hover:underline">
+          <Link to="/login" className="text-yellow-600 hover:underline cursor-pointer">
             Login
           </Link>
         </p>
