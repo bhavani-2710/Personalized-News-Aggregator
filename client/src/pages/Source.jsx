@@ -1,22 +1,25 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import Card from "../components/Cards"
+import Card from "../components/Cards";
 
-const API_URL =
-  "https://newsdata.io/api/1/sources?country=in&apikey=pub_667716bd1fe9b716e3abc1d23292d16e44fd4";
+const API_URL = import.meta.env.VITE_API_BACKEND_URL;
 
 const Source = () => {
   const [articles, setArticles] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [language, setLanguage] = useState("en");
 
   useEffect(() => {
+    const token = localStorage.getItem('token');
     axios
-      .get(API_URL)
+      .get(`${API_URL}/news/sources/${language}`, {headers: {Authorization: `Bearer ${token}`}})
       .then((res) => {
-        const filteredArticles = (res.data.results || []).filter(
-          (a) => a.icon && a.icon.trim() !== ""
-        );
+        console.log(res);
+        // const filteredArticles = (res.data.results || []).filter(
+        //   (a) => a.icon && a.icon.trim() !== ""
+        // );
+        const filteredArticles = res.data;
         setArticles(filteredArticles);
         setLoading(false);
       })
@@ -26,7 +29,7 @@ const Source = () => {
         );
         setLoading(false);
       });
-  }, []);
+  }, [language]);
 
   if (loading)
     return (
@@ -41,10 +44,10 @@ const Source = () => {
 
   return (
     <div className="min-h-screen bg-gray-800 flex flex-wrap gap-6 p-6 justify-center">
-      {console.log(articles)}
-      {articles.map((article) => (
-        <Card key={article.id} article={article} />
-      ))}
+      {articles &&
+        articles.map((article, index) => (
+          <Card key={article.id} article={article} />
+        ))}
     </div>
   );
 };

@@ -1,5 +1,5 @@
 const express = require("express");
-const NewsHistory = require("../models/NewsHistory");
+const NewsHistory = require("../models/newsHistoryModel");
 
 const router = express.Router();
 

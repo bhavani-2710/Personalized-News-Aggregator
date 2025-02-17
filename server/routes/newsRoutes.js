@@ -10,8 +10,8 @@ const {
 
 const router = express.Router();
 
-router.get("/language", fetchNewsByLanguage);
-router.get("/sources", fetchSources);
+router.get("/lang/:language", fetchNewsByLanguage);
+router.get("/sources/:language", fetchSources);
 router.get("/search", searchParticularNews);
 router.get("/next-search", getNextPageSearchData);
 router.get("/:source", getNewsOfParticularDomain);

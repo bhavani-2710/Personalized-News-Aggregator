@@ -1,17 +1,19 @@
 import React, { useEffect, useState } from "react";
-import Card from "../components/Cards";
 import NewsCard from "../components/NewsCard";
 
-const API_URL =
-  "https://newsdata.io/api/1/latest?country=in&language=en&apikey=pub_66444a397d41a7fb2885640ab4febc90b95bb";
+const API_URL = import.meta.env.VITE_API_BACKEND_URL;
 
 const LatestNews = () => {
   const [articles, setArticles] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [language, setLanguage] = useState("en");
 
   useEffect(() => {
-    fetch(API_URL)
+    const token = localStorage.getItem("token");
+    fetch(`${API_URL}/news/lang/${language}`, {
+      headers: { Authorization: `Bearer ${token}` },
+    })
       .then((response) => response.json())
       .then((data) => {
         setArticles(data.results);
@@ -21,7 +23,7 @@ const LatestNews = () => {
         setError(err.message);
         setLoading(false);
       });
-  }, []);
+  }, [language]);
 
   if (loading)
     return (
@@ -34,12 +36,9 @@ const LatestNews = () => {
     <div className="min-h-screen bg-gray-800 flex flex-wrap gap-6 p-6 justify-center">
       {console.log(articles)} {/**/}
       {articles &&
-        articles.map(
-          (article, index) =>
-            (article.description && (
-              <NewsCard key={index} article={article} />
-            )) || <p>Loading...</p>
-        )}
+        articles.map((article, index) => (
+          <NewsCard key={index} article={article} />
+        ))}
     </div>
   );
 };
