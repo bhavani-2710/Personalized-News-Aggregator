@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import NewsCard from "../components/NewsCard";
+import Navbar from "../components/Navbar";
 
 const API_URL = import.meta.env.VITE_API_BACKEND_URL;
 
@@ -32,14 +33,17 @@ const LatestNews = () => {
   if (error)
     return <p className="text-red-500 text-center mt-10">Error: {error}</p>;
 
-  return (
+  return (<><Navbar></Navbar>
+    
     <div className="min-h-screen bg-gray-800 flex flex-wrap gap-6 p-6 justify-center">
+      
       {console.log(articles)} {/**/}
       {articles &&
         articles.map((article, index) => (
           <NewsCard key={index} article={article} />
         ))}
     </div>
+    </>
   );
 };
 
