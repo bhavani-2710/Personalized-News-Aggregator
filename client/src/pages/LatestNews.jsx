@@ -33,8 +33,9 @@ const LatestNews = () => {
   if (error)
     return <p className="text-red-500 text-center mt-10">Error: {error}</p>;
 
-  return (<><Navbar></Navbar>
-    
+  return (
+  <>
+  <Navbar></Navbar>
     <div className="min-h-screen bg-gray-800 flex flex-wrap gap-6 p-6 justify-center">
       
       {console.log(articles)} {/**/}

@@ -13,6 +13,7 @@ import Login from "./pages/Login";
 import Register from "./pages/Register";
 import Landing from "./pages/Landing.jsx";
 import Home from "./pages/Home.jsx";
+import SavedNews from "./pages/SavedNews.jsx";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -23,6 +24,7 @@ const router = createBrowserRouter(
       <Route path="/home" element={<Home />} />
       <Route path="source" element={<Source />} />
       <Route path="latest-news" element={<LatestNews />} />
+      <Route path="/saved-news" element={<SavedNews />} />
     </Route>
   )
 );

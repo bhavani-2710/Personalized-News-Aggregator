@@ -7,6 +7,8 @@ import Sidebar from './components/Sidebar';
 import NewsCard from './components/NewsCard';
 import Login from './pages/Login';
 import Register from './pages/Register';
+import SavedNews from './pages/SavedNews';
+
 
 function App() {
   return (
@@ -18,6 +20,7 @@ function App() {
           <Route path="/" element={<NewsCard />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
+          <Route path="/saved-news" element={<SavedNews />} />
         </Routes>
         <Footer />
       </>
