@@ -20,7 +20,7 @@ connectDB();
 // Routes
 app.use("/news", jwtAuthMiddleware, newsRouter);
 app.use("/users", authRoutes);
-app.use("/history", historyRoutes);
+app.use("/history",jwtAuthMiddleware, historyRoutes);
 
 // Testing
 app.get("/", (req, res) => {
