@@ -13,27 +13,27 @@ const SavedNews = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
+  const fetchHistory = async () => {
+    try {
+      const token = localStorage.getItem("token");
+      const headers = { Authorization: `Bearer ${token}` };
+
+      // Fetch visited news and sources simultaneously
+      const result = await 
+        axios.get(`${API_URL}/history/fetch-history`, { headers });
+        console.log(result.data)
+
+      setVisitedNews(result.data.data.articles || []);
+      setVisitedSources(result.data.data.sources || []);
+    } catch (err) {
+      setError(err.response?.data?.message || "Error fetching data.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
   useEffect(() => {
-    const token = localStorage.getItem("token");
-
-    const fetchVisitedNews = axios.get(`${API_URL}/news/visited`, {
-      headers: { Authorization: `Bearer ${token}` },
-    });
-
-    const fetchVisitedSources = axios.get(`${API_URL}/news/visited-sources`, {
-      headers: { Authorization: `Bearer ${token}` },
-    });
-
-    Promise.all([fetchVisitedNews, fetchVisitedSources])
-      .then(([newsRes, sourcesRes]) => {
-        setVisitedNews(newsRes.data.results || []);
-        setVisitedSources(sourcesRes.data || []);
-        setLoading(false);
-      })
-      .catch((err) => {
-        setError(err.message || "Something went wrong while fetching data.");
-        setLoading(false);
-      });
+    fetchHistory();
   }, []);
 
   if (loading)
