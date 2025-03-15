@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import Card from "../components/Cards";
+import Sidebar from "../components/Sidebar";
 
 const API_URL = import.meta.env.VITE_API_BACKEND_URL;
 
@@ -42,13 +43,15 @@ const Source = () => {
       <p className="text-red-500 text-center mt-10 text-lg">Error: {error}</p>
     );
 
-  return (
-    <div className="min-h-screen bg-gray-800 flex flex-wrap gap-6 p-6 justify-center">
+  return (<>
+  <Sidebar />
+    <div className=" bg-gray-800 flex flex-wrap gap-6 p-6 justify-center">
       {articles &&
         articles.map((article, index) => (
           <Card key={article.id} article={article} />
         ))}
     </div>
+    </>
   );
 };
 

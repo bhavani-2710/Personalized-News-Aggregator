@@ -24,7 +24,7 @@ const Sidebar = () => {
   };
 
   return (
-    <div className="h-screen flex">
+    <div className="h-10 bg-gray-800 flex">
       <div
         className={`fixed top-0 left-0 h-full bg-black text-white shadow-lg transition-transform transform ${
           isOpen ? "translate-x-0" : "-translate-x-full"

@@ -6,7 +6,7 @@ const Card = ({ article }) => {
 
   return (
     <div
-      className="bg-gray-900 text-white p-5 rounded-2xl shadow-lg w-full md:w-1/3 overflow-hidden cursor-pointer hover:shadow-xl transition"
+      className="bg-gray-900 text-white p-5 rounded-2xl shadow-lg w-full h-80 md:w-1/3 overflow-hidden cursor-pointer hover:shadow-xl transition"
       onClick={() => navigate(`https://newsdata.io/api/1/latest?country=in&apikey=pub_66920f1da3317060c541d77964cfde57742ba/domain=${article.id}`)}
     >
       {article && (
