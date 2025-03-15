@@ -6,9 +6,7 @@ const connectDB = require("./config/db");
 const newsRouter = require("./routes/newsRoutes");
 const authRoutes = require("./routes/authRoutes");
 const historyRoutes = require("./routes/historyRoutes");
-const {
-  jwtAuthMiddleware,
-} = require("./middlewares/jwtAuthMiddleware");
+const { jwtAuthMiddleware } = require("./middlewares/jwtMiddleware");
 
 const app = express();
 
@@ -20,7 +18,7 @@ app.use(morgan("dev"));
 connectDB();
 
 // Routes
-app.use("/news", newsRouter);
+app.use("/news", jwtAuthMiddleware, newsRouter);
 app.use("/users", authRoutes);
 app.use("/history", historyRoutes);
 

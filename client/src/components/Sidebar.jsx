@@ -1,15 +1,15 @@
-import React, { useState } from 'react';
-import { Menu, Book, Clock, User, LogOut } from 'lucide-react';
-import { NavLink, useNavigate } from 'react-router-dom';
+import React, { useState } from "react";
+import { Menu, Book, Clock, User, LogOut } from "lucide-react";
+import { NavLink, useNavigate } from "react-router-dom";
 
 const Sidebar = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const [selectedSection, setSelectedSection] = useState('');
+  const [selectedSection, setSelectedSection] = useState("");
   const navigate = useNavigate();
 
   const handleLogout = () => {
-    alert('Logging out...');
-    navigate('/login');
+    localStorage.removeItem("token");
+    navigate("/login");
   };
 
   const renderContent = () => {
@@ -103,7 +103,7 @@ const Sidebar = () => {
         )}
         {/* <div className="p-4">{renderContent()}</div> */}
       </div>
-      </div>
+    </div>
   );
 };
 
