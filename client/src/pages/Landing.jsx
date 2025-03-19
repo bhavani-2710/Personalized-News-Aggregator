@@ -1,6 +1,7 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import { Search, Globe, BookOpen } from "lucide-react";
+import bg from "../assets/landing-bg.jpeg";
 
 function Landing() {
   const navigate = useNavigate();
@@ -27,7 +28,7 @@ function Landing() {
       <div className="relative h-screen">
         {/* Background Image */}
         <img
-          src="/src/assets/landing-bg.jpeg" // <-- Ensure the image path is correct
+          src={bg} // <-- Ensure the image path is correct
           alt="News Background"
           className="absolute inset-0 w-full h-full object-cover -z-10"
         />
