@@ -1,10 +1,8 @@
-import { Sidebar } from 'lucide-react'
 import React from 'react'
-
 
 function Home() {
   return (
-    <Sidebar/>
+    <div>Home</div>
   )
 }
 
