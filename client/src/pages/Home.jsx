@@ -43,18 +43,41 @@ const Home = () => {
   if (error)
     return <p className="text-red-500 text-center mt-10">Error: {error}</p>;
 
+  
   return (
     <>
       <Navbar />
       <Sidebar />
       <div className="min-h-screen bg-gray-800 p-6">
-        <h2 className="text-white text-xl mb-4">Recommended News Sources</h2>
+
+        {/* Suggested News Section */}
+        <div className="bg-gray-900 text-white p-4 rounded-lg shadow-lg">
+          <h3 className="text-lg font-semibold mb-3">🔵 Suggested for you</h3>
+          <p className="text-sm text-gray-400">Follow publishers to see more of what you like</p>
+
+          <div className="flex overflow-x-auto space-x-4 mt-3 scrollbar-hide">
+            {newsSources.slice(0, 5).map((source) => (
+              <div
+                key={source.id}
+                className="flex items-center bg-gray-700 rounded-lg p-3 min-w-[250px] cursor-pointer hover:bg-gray-600"
+              >
+                <img src={source.icon} alt={source.title} className="w-10 h-10 rounded-full mr-3" />
+                <p className="font-medium">{source.title}</p>
+                <button className="ml-auto text-gray-400 hover:text-white text-lg">➕</button>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Recommended News Sources */}
+        <h2 className="text-white text-xl mt-8 mb-4">Recommended News Sources</h2>
         <div className="flex flex-wrap gap-6 justify-center">
           {newsSources.map((source) => (
             <Card key={source.id} article={source} />
           ))}
         </div>
 
+        {/* Latest News */}
         <h2 className="text-white text-xl mt-8 mb-4">Latest News</h2>
         <div className="flex flex-wrap gap-6 justify-center">
           {latestNews.map((news, index) => (
