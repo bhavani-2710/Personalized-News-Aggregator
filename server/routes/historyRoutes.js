@@ -114,61 +114,128 @@ router.get("/recommendations/:user_id", async (req, res) => {
     // Fetch user's history
     const userHistory = await NewsHistory.findOne({ user_id });
 
+    // Fetch sources and news from NewsData.io
+    const API_KEY = process.env.API_KEY;
+
+    // Fetch sources
+    const sourcesUrl = `https://newsdata.io/api/1/sources?apikey=${API_KEY}&language=en`;
+    const sourcesResponse = await axios.get(sourcesUrl);
+    const allSources = sourcesResponse.data.results || [];
+
+    // Fetch latest news
+    const newsUrl = `https://newsdata.io/api/1/latest?apikey=${API_KEY}&language=en`;
+    const newsResponse = await axios.get(newsUrl);
+    const latestArticles = newsResponse.data.results || [];
+
+    // Prepare recommended sources (top 6 sources)
+    const recommendedSources = allSources
+      .filter((source) => source.url && source.description)
+      .slice(0, 6)
+      .map((source) => ({
+        id: source.id,
+        name: source.name,
+        description: source.description,
+        url: source.url,
+        icon: source.icon,
+        category: source.category || [],
+        language: source.language,
+        country: source.country,
+      }));
+
+    // Prepare suggested publishers (based on sources)
+    const suggestedPublishers = recommendedSources.map((source) => ({
+      id: source.id,
+      name: source.name,
+      logo: `/logos/${source.id}.png`, // Assumes you have logos for sources
+    }));
+
+    console.log(latestArticles);
+
+    // If no user history, return general recommendations
     if (
       !userHistory ||
       (userHistory.articles.length === 0 && userHistory.sources.length === 0)
     ) {
-      return res
-        .status(200)
-        .json({ message: "No recommendations available", recommendations: [] });
+      return res.status(200).json({
+        message: "Recommendations fetched successfully",
+        recommendedSources: recommendedSources,
+        suggestedPublishers: suggestedPublishers,
+        recommendedArticles: latestArticles.slice(0, 10).map((article) => ({
+          id: article.article_id,
+          title: article.title,
+          description: article.description,
+          source: article.source_id,
+          keywords: article.keywords,
+          source_name: article.source_name,
+          source_url: article.source_url,
+          source_icon: article.source_icon,
+          country: article.country,
+          category: article.category,
+          link: article.link,
+          image: article.image_url,
+          pubDate: article.pubDate,
+        })),
+      });
     }
 
-    // Extract unique interests
+    // Extract unique interests if user history exists
     const keywords = new Set();
     const categories = new Set();
     const sourceIds = new Set();
 
     userHistory.articles.forEach((article) => {
-      article.keywords?.forEach((keyword) => keywords.add(keyword)); // Check keywords exist
-      article.category?.forEach((cat) => categories.add(cat)); // Check categories exist
+      article.keywords?.forEach((keyword) => keywords.add(keyword));
+      article.category?.forEach((cat) => categories.add(cat));
       if (article.source_id) sourceIds.add(article.source_id);
     });
 
-    userHistory.sources.forEach((source) => {
-      if (source.id) sourceIds.add(source.id); // Ensure source exists before adding
-    });
-    console.log("keywords: ", keywords, "\n");
-    console.log("categories: ", categories, "\n");
-    console.log("sourceIds: ", sourceIds)
-
-    // Fetch latest news from NewsData.io
-    const NEWS_API_KEY = process.env.API_KEY; // Replace with your actual API key
-    const newsApiUrl = `https://newsdata.io/api/1/news?apikey=${NEWS_API_KEY}&language=en`;
-
-    const response = await axios.get(newsApiUrl);
-    const latestArticles = response.data.results || []; // Ensure results exist
-
-    // Filter relevant articles based on user interests (articles & sources)
+    // Filter relevant articles based on user interests
     const recommendedArticles = latestArticles
       .filter(
         (article) =>
-          article.keywords?.some((keyword) => keywords.has(keyword)) || // Match keywords
-          article.category?.some((cat) => categories.has(cat)) || // Match category
-          (article.source_id && sourceIds.has(article.source_id)) // Match sources
+          article.keywords?.some((keyword) => keywords.has(keyword)) ||
+          article.category?.some((cat) => categories.has(cat)) ||
+          (article.source_id && sourceIds.has(article.source_id))
       )
-      .slice(0, 10); // Limit recommendations to 10 articles
+      .slice(0, 10)
+      .map((article) => ({
+        id: article.article_id,
+        title: article.title,
+        description: article.description,
+        source: article.source_id,
+        link: article.link,
+        image: article.image_url,
+        pubDate: article.pubDate,
+      }));
 
-    res
-      .status(200)
-      .json({
-        message: "Recommendations fetched successfully",
-        recommendations: recommendedArticles,
-      });
+    // Merge and prioritize recommendations
+    const finalRecommendations = [
+      ...recommendedArticles,
+      ...latestArticles
+        .slice(0, 10 - recommendedArticles.length)
+        .map((article) => ({
+          id: article.article_id,
+          title: article.title,
+          description: article.description,
+          source: article.source_id,
+          link: article.link,
+          image: article.image_url,
+          pubDate: article.pubDate,
+        })),
+    ];
+
+    res.status(200).json({
+      message: "Recommendations fetched successfully",
+      recommendedSources: recommendedSources,
+      suggestedPublishers: suggestedPublishers,
+      recommendedArticles: finalRecommendations,
+    });
   } catch (error) {
     console.error(error);
-    res
-      .status(500)
-      .json({ message: "Internal Server Error", error: error.message });
+    res.status(500).json({
+      message: "Internal Server Error",
+      error: error.message,
+    });
   }
 });
 
