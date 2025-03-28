@@ -25,10 +25,10 @@ function NewsCard({ article }) {
             {article.title || "No title available"}
           </h5>
         </a>
-        <p className="text-sm text-gray-600 mb-4 line-clamp-4">
+        <p className="text-sm text-gray-600 mb-4 line-clamp-4 ">
           {article.description || "No description available"}
         </p>
-        <button
+        {/* <button
           onClick={handleClick}
           className="inline-flex items-center px-4 py-2 text-sm font-medium text-white bg-blue-500 rounded-lg hover:bg-blue-600 focus:ring-4 focus:ring-blue-300 focus:outline-none transition-colors duration-200 mt-auto"
         >
@@ -48,7 +48,7 @@ function NewsCard({ article }) {
               d="M1 5h12m0 0L9 1m4 4L9 9"
             />
           </svg>
-        </button>
+        </button> */}
       </div>
     </div>
   );
