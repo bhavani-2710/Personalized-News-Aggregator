@@ -149,8 +149,6 @@ router.get("/recommendations/:user_id", async (req, res) => {
       logo: `/logos/${source.id}.png`, // Assumes you have logos for sources
     }));
 
-    console.log(latestArticles);
-
     // If no user history, return general recommendations
     if (
       !userHistory ||
