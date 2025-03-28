@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import NewsCard from "../components/NewsCard";
-import Navbar from "../components/Navbar";
+
 
 const API_URL = import.meta.env.VITE_API_BACKEND_URL;
 
@@ -76,7 +76,39 @@ const LatestNews = () => {
 
   return (
     <>
-      <Navbar />
+      {/* Search Bar */}
+      <div className="hidden sm:ml-8 sm:flex sm:flex-1 sm:justify-center">
+                  <form className="relative w-full max-w-2xl mx-auto">
+                    <input
+                      type="text"
+                      className="w-full rounded-full border-gray-300 bg-gray-50 text-gray-800 placeholder-gray-400 py-2.5 pl-12 pr-24 focus:border-blue-500 focus:ring-2 focus:ring-blue-500 focus:outline-none transition-all duration-200"
+                      placeholder="Search trending news..."
+                    />
+                    <button
+                      type="submit"
+                      className="absolute right-2 top-1/2 -translate-y-1/2 bg-blue-500 text-white rounded-full px-4 py-1.5 hover:bg-blue-600 transition-colors duration-200"
+                    >
+                      Search
+                    </button>
+                    <div className="absolute left-4 top-1/2 -translate-y-1/2">
+                      <svg
+                        className="h-5 w-5 text-gray-500"
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 20 20"
+                        stroke="currentColor"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth="2"
+                          d="M8 4a4 4 0 100 8 4 4 0 000-8zm6 14l-4-4"
+                        />
+                      </svg>
+                    </div>
+                  </form>
+                </div>
+              
       <div className="min-h-screen bg-gradient-to-br from-blue-50 to-gray-100 p-10">
         {/* Language Switcher */}
         <div className="flex justify-end mb-8">

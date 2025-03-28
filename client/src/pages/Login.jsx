@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import axios from "axios";
-import { FaGoogle, FaFacebook } from "react-icons/fa";
+import { FaGoogle, FaFacebook, FaArrowLeft } from "react-icons/fa";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { setUser } from "../redux/userSlice";
@@ -43,6 +43,15 @@ const Login = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-gray-100 flex items-center justify-center p-6">
+      {/* Updated Back Button */}
+      <button 
+        onClick={() => navigate("/")} 
+        className="absolute top-6 left-6 flex items-center space-x-2 text-gray-700 bg-white shadow-md hover:shadow-lg rounded-lg px-4 py-2 transition-all duration-300 ease-in-out"
+      >
+        <FaArrowLeft className="mr-2" />
+        <span className="font-medium">Back to Home</span>
+      </button>
+      
       <div className="bg-white p-8 rounded-2xl shadow-lg w-full max-w-md">
         <h2 className="text-4xl font-bold text-gray-800 text-center mb-4">Welcome Back!</h2>
         <p className="text-center text-gray-600 mb-8">Login to your NewsHub account</p>
