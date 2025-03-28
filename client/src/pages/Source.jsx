@@ -21,7 +21,7 @@ const Source = () => {
           headers: { Authorization: `Bearer ${token}` },
         });
         
-        console.log(res);
+        console.log(res.data);
         setArticles(res.data);
         setLoading(false);
       } catch (err) {

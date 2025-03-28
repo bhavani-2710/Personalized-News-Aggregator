@@ -4,15 +4,15 @@ import { useNavigate } from "react-router-dom";
 const Card = ({ article }) => {
   const navigate = useNavigate();
 
-  const handleClick = () => {
-    const url = `https://newsdata.io/api/1/latest?country=in&apikey=pub_66920f1da3317060c541d77964cfde57742ba/domain=${article.id}`;
-    window.open(url, "_blank", "noopener,noreferrer"); // Open in new tab instead of navigate
+  const handleClick = (article) => {
+    const url = article.url
+    window.open(url, "_blank", "noopener, noreferrer"); // Open in new tab instead of navigate
   };
 
   return (
     <div
       className="bg-white text-gray-800 p-6 rounded-2xl shadow-md w-full max-w-[360px] min-h-[340px] cursor-pointer transition-all duration-300 hover:shadow-lg hover:-translate-y-2 border border-gray-200"
-      onClick={handleClick}
+      onClick={() => handleClick(article)}
     >
       {article && (
         <>
