@@ -12,6 +12,7 @@ const Source = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [language, setLanguage] = useState("en");
+  const [searchTerm, setSearchTerm] = useState("");
 
   useEffect(() => {
     const fetchSources = async () => {
@@ -20,7 +21,7 @@ const Source = () => {
         const res = await axios.get(`${API_URL}/news/sources/${language}`, {
           headers: { Authorization: `Bearer ${token}` },
         });
-        
+
         console.log(res.data);
         setArticles(res.data);
         setLoading(false);
@@ -35,13 +36,38 @@ const Source = () => {
     fetchSources();
   }, [language]);
 
+  const handleSearch = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+
+    const term = e.target.value;
+    setSearchTerm(term);
+
+    const token = localStorage.getItem("token");
+    try {
+      const response = await axios.get(
+        `${API_URL}/news/search&searchWord=${term}`,
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
+      setArticles(response.data);
+      console.log(response.data);
+    } catch (error) {
+      console.log(error);
+      setError(error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   if (loading)
     return (
       <p className="text-gray-600 text-center mt-10 text-lg">
         Loading news sources...
       </p>
     );
-  
+
   if (error)
     return (
       <div className="text-red-500 text-center mt-10 text-lg bg-red-50 p-3 rounded-lg">

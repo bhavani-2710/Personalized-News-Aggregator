@@ -36,6 +36,31 @@ const LatestNews = () => {
     setLanguage(e.target.value);
   };
 
+  const handleSearch = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+
+    const term = e.target.value;
+    setSearchTerm(term);
+
+    const token = localStorage.getItem("token");
+    try {
+      const response = await axios.get(
+        `${API_URL}/news/search&searchWord=${term}`,
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
+      setArticles(response.data);
+      console.log(response.data);
+    } catch (error) {
+      console.log(error);
+      setError(error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   if (loading)
     return (
       <div className="min-h-screen bg-gradient-to-br from-blue-50 to-gray-100 flex items-center justify-center">

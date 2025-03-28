@@ -42,7 +42,7 @@ const fetchSources = async (req, res) => {
 
 // Fetch news containing a particular keyword -> 'SEARCH'
 const searchParticularNews = async (req, res) => {
-  const { searchWord } = req.body;
+  const { searchWord } = req.query;
 
   try {
     const response = await axios.get(
