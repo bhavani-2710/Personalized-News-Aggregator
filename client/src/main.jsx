@@ -7,6 +7,10 @@ import {
   Route,
   RouterProvider,
 } from "react-router-dom";
+import { Provider } from "react-redux";
+import { PersistGate } from "redux-persist/integration/react";
+import store, { persistor } from "./redux/store";
+import reportWebVitals from "./reportWebVitals.js";
 import Source from "./pages/Source.jsx";
 import LatestNews from "./pages/LatestNews.jsx";
 import Login from "./pages/Login";
@@ -22,15 +26,21 @@ const router = createBrowserRouter(
       <Route path="/login" element={<Login />} />
       <Route path="/register" element={<Register />} />
       <Route path="/home" element={<Home />} />
-      <Route path="source" element={<Source />} />
-      <Route path="latest-news" element={<LatestNews />} />
+      <Route path="/source" element={<Source />} />
+      <Route path="/latest-news" element={<LatestNews />} />
       <Route path="/saved-news" element={<SavedNews />} />
     </Route>
   )
 );
 
 createRoot(document.getElementById("root")).render(
-  <StrictMode>
+  <Provider store={store}>
+    <PersistGate loading={null} persistor={persistor}>
     <RouterProvider router={router} />
-  </StrictMode>
+    </PersistGate>
+  </Provider>
+  
 );
+
+
+reportWebVitals();

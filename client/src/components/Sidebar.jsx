@@ -1,15 +1,20 @@
 import React, { useState, useRef, useEffect } from "react";
 import { Menu, Book, Clock, User, LogOut } from "lucide-react";
 import { NavLink, useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { clearUser } from "../redux/userSlice";
 
 const Sidebar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [selectedSection, setSelectedSection] = useState("");
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const user = useSelector((state) => state.user.user);
   const sidebarRef = useRef(null);
 
   const handleLogout = () => {
     localStorage.removeItem("token");
+    dispatch(clearUser());
     navigate("/login");
   };
 
@@ -55,7 +60,10 @@ const Sidebar = () => {
               <p>Source</p>
             </button>
           </NavLink>
-          <NavLink to="/latest-news" onClick={() => setSelectedSection("latest-news")}>
+          <NavLink
+            to="/latest-news"
+            onClick={() => setSelectedSection("latest-news")}
+          >
             <button
               className={`flex items-center gap-4 w-full text-left p-3 rounded-lg transition-colors ${
                 selectedSection === "latest-news"
@@ -72,8 +80,8 @@ const Sidebar = () => {
           <div className="flex items-center gap-4 mb-6">
             <User className="w-6 h-6 text-gray-500" />
             <div>
-              <p className="font-semibold text-gray-800">Profile</p>
-              <p className="text-sm text-gray-600">user@example.com</p>
+              <p className="font-semibold text-gray-800">{user.name}</p>
+              <p className="text-sm text-gray-600">{user.email}</p>
             </div>
           </div>
           <button

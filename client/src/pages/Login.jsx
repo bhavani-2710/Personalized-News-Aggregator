@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import axios from "axios";
 import { FaGoogle, FaFacebook } from "react-icons/fa";
 import { Link, useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { setUser } from "../redux/userSlice";
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -9,6 +11,7 @@ const Login = () => {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
+  const dispatch = useDispatch();
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
@@ -28,6 +31,7 @@ const Login = () => {
       
       if (response.data.message === "Login Successfull") {
         localStorage.setItem("token", response.data.token);
+        dispatch(setUser(response.data.user));
         navigate("/source");
       }
     } catch (error) {
