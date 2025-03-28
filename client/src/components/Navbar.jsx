@@ -35,13 +35,7 @@ const Navbar = () => {
 
               {/* Logo Section */}
               <div className="flex flex-1 items-center justify-center sm:justify-start">
-                <div className="flex flex-shrink-0 items-center">
-                  <img
-                    className="h-10 w-auto rounded-full"
-                    src="./src/assets/logo.webp"
-                    alt="Logo"
-                  />
-                </div>
+                
 
                 {/* Search Bar */}
                 <div className="hidden sm:ml-8 sm:flex sm:flex-1 sm:justify-center">
