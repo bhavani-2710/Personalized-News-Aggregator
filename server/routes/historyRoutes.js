@@ -7,12 +7,19 @@ const axios = require("axios");
 router.post("/save-news", async (req, res) => {
   try {
     const user_id = req.user.id;
-    const { articles, sources } = req.body;
+    console.log(user_id)
+    let { articles, sources } = req.body;
 
-    if (!user_id || !articles || !sources) {
+    // Validate user_id and ensure at least one data type is present
+    if (!user_id || (!articles && !sources)) {
       return res.status(400).json({ message: "Missing required fields." });
     }
 
+    // Ensure articles and sources are arrays, defaulting to empty array
+    articles = Array.isArray(articles) ? articles : [];
+    sources = Array.isArray(sources) ? sources : [];
+
+    // Validate user_id format
     if (!mongoose.Types.ObjectId.isValid(user_id)) {
       return res.status(400).json({ message: "Invalid user_id format." });
     }
@@ -21,33 +28,37 @@ router.post("/save-news", async (req, res) => {
     let existingUser = await NewsHistory.findOne({ user_id });
 
     if (existingUser) {
-      // Convert existing article IDs to a Set
+      // Convert existing article IDs to a Set for efficient lookup
       const existingArticleIds = new Set(
-        existingUser.articles.map((a) => a.article_id)
+        (existingUser.articles || []).map((a) => a.article_id)
       );
 
-      // Filter out duplicate articles based on article_id
-      const uniqueArticles = articles.filter(
-        (article) => !existingArticleIds.has(article.article_id)
-      );
-
-      // Convert existing source IDs to a Set
+      // Convert existing source IDs to a Set for efficient lookup
       const existingSourceIds = new Set(
-        existingUser.sources.map((source) => source.id)
+        (existingUser.sources || []).map((source) => source.id)
       );
 
-      // Filter out duplicate sources based on id
+      // Filter out duplicate articles
+      const uniqueArticles = articles.filter(
+        (article) => article && !existingArticleIds.has(article.article_id)
+      );
+
+      // Filter out duplicate sources
       const uniqueSources = sources.filter(
-        (source) => !existingSourceIds.has(source.id)
+        (source) => source && !existingSourceIds.has(source.id)
       );
 
-      // Append only unique data
+      // Append unique articles and sources
       if (uniqueArticles.length > 0) {
+        existingUser.articles = existingUser.articles || [];
         existingUser.articles.push(...uniqueArticles);
       }
+
       if (uniqueSources.length > 0) {
+        existingUser.sources = existingUser.sources || [];
         existingUser.sources.push(...uniqueSources);
       }
+      console.log(existingUser.sources)
 
       await existingUser.save();
       return res
@@ -57,14 +68,16 @@ router.post("/save-news", async (req, res) => {
       // Create a new document if user doesn't exist
       const newHistory = new NewsHistory({
         user_id,
-        articles: [
-          ...new Map(
-            articles.map((article) => [article.article_id, article])
-          ).values(),
-        ], // Ensure unique articles
-        sources: [
-          ...new Map(sources.map((source) => [source.id, source])).values(),
-        ], // Ensure unique sources
+        articles: Array.from(new Map(
+          articles
+            .filter(article => article)
+            .map((article) => [article.article_id, article])
+        ).values()),
+        sources: Array.from(new Map(
+          sources
+            .filter(source => source)
+            .map((source) => [source.id, source])
+        ).values()),
       });
 
       await newHistory.save();
@@ -79,7 +92,6 @@ router.post("/save-news", async (req, res) => {
       .json({ message: "Internal Server Error", error: error.message });
   }
 });
-
 router.get("/fetch-history", async (req, res) => {
   try {
     const user_id = req.user.id;
@@ -146,7 +158,12 @@ router.get("/recommendations/:user_id", async (req, res) => {
     const suggestedPublishers = recommendedSources.map((source) => ({
       id: source.id,
       name: source.name,
-      logo: `/logos/${source.id}.png`, // Assumes you have logos for sources
+      description: source.description,
+      url: source.url,
+      icon: source.icon,
+      category: source.category || [],
+      language: source.language,
+      country: source.country,
     }));
 
     // If no user history, return general recommendations
