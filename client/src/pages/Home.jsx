@@ -92,7 +92,7 @@ const Home = () => {
       <Sidebar />
       <div className="min-h-screen bg-gradient-to-br from-blue-50 to-gray-100 p-10">
         {/* Language Switcher */}
-        <div className="flex justify-end mb-8">
+        {/* <div className="flex justify-end mb-8">
           <select
             value={language}
             onChange={handleLanguageChange}
@@ -102,12 +102,12 @@ const Home = () => {
             <option value="es">Spanish</option>
             <option value="fr">French</option>
           </select>
-        </div>
+        </div> */}
 
         {/* Suggested News Section */}
         <div className="bg-white text-gray-800 p-8 rounded-2xl shadow-xl border border-gray-200">
           <h3 className="text-2xl font-bold mb-3 text-blue-600 tracking-wide">
-            🔵 Suggested for You
+            Suggested for You
           </h3>
           <p className="text-sm text-gray-500 mb-6 italic">
             Follow publishers to see more of what you love
