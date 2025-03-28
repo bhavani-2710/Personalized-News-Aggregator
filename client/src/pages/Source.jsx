@@ -13,24 +13,22 @@ const Source = () => {
   const [error, setError] = useState(null);
   const [language, setLanguage] = useState("en");
 
-  useEffect(() => {
-    const token = localStorage.getItem("token");
-    axios
-      .get(`${API_URL}/news/sources/${language}`, {
+  useEffect(async () => {
+    try {
+      const token = localStorage.getItem("token");
+      const response = await axios.get(`${API_URL}/news/sources/${language}`, {
         headers: { Authorization: `Bearer ${token}` },
-      })
-      .then((res) => {
-        console.log(res);
-        const filteredArticles = res.data;
-        setArticles(filteredArticles);
-        setLoading(false);
-      })
-      .catch((err) => {
-        setError(
-          err.message || "Something went wrong while fetching news sources."
-        );
-        setLoading(false);
       });
+      const filteredArticles = response.data;
+      setArticles(filteredArticles);
+    } catch (error) {
+      console.log(error);
+      setError(
+        error.message || "Something went wrong while fetching news sources."
+      );
+    } finally {
+      setLoading(false);
+    }
   }, [language]);
 
   if (loading)
