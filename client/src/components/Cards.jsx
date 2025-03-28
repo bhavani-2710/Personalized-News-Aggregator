@@ -5,8 +5,11 @@ const Card = ({ article }) => {
   const navigate = useNavigate();
 
   const handleClick = (article) => {
-    const url = article.url
-    window.open(url, "_blank", "noopener, noreferrer"); // Open in new tab instead of navigate
+    // const url = article.url
+    // window.open(url, "_blank", "noopener, noreferrer"); // Open in new tab instead of navigate
+    navigate("/domain-news", {
+      state: { domain: article.id, name: article.name }, // Pass the article data to the new page
+    });
   };
 
   return (
@@ -14,6 +17,7 @@ const Card = ({ article }) => {
       className="bg-white text-gray-800 p-6 rounded-2xl shadow-md w-full max-w-[360px] min-h-[340px] cursor-pointer transition-all duration-300 hover:shadow-lg hover:-translate-y-2 border border-gray-200"
       onClick={() => handleClick(article)}
     >
+      {/* {console.log(article)} */}
       {article && (
         <>
           <img
