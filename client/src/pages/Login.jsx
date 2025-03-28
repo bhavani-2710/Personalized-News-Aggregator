@@ -38,32 +38,34 @@ const Login = () => {
   };
 
   return (
-    <div className="flex items-center justify-center h-screen bg-yellow-950">
-      <div className="bg-white p-10 rounded-lg shadow-2xl w-md">
-        <h2 className="text-5xl font-bold text-yellow-600 text-center mb-6">Welcome Back!</h2>
-        <p className="text-center text-gray-700 mb-6">Login to your NewsHub account</p>
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-gray-100 flex items-center justify-center p-6">
+      <div className="bg-white p-8 rounded-2xl shadow-lg w-full max-w-md">
+        <h2 className="text-4xl font-bold text-gray-800 text-center mb-4">Welcome Back!</h2>
+        <p className="text-center text-gray-600 mb-8">Login to your NewsHub account</p>
 
-        {error && <div className="text-red-500 text-center mb-4">{error}</div>}
+        {error && (
+          <div className="text-red-500 text-center mb-6 bg-red-50 p-3 rounded-lg">{error}</div>
+        )}
 
         <form onSubmit={handleSubmit}>
-          <div className="mb-4">
-            <label className="block text-gray-700">Email</label>
+          <div className="mb-6">
+            <label className="block text-gray-700 font-medium mb-2">Email</label>
             <input
               type="email"
               placeholder="Enter your email"
               value={email}
-              className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:border-yellow-600"
+              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all duration-200"
               onChange={(e) => setEmail(e.target.value)}
             />
           </div>
 
-          <div className="mb-4">
-            <label className="block text-gray-700">Password</label>
+          <div className="mb-6">
+            <label className="block text-gray-700 font-medium mb-2">Password</label>
             <input
               type="password"
               placeholder="Enter your password"
               value={password}
-              className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:border-yellow-600"
+              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all duration-200"
               onChange={(e) => setPassword(e.target.value)}
             />
           </div>
@@ -71,26 +73,28 @@ const Login = () => {
           <button
             type="submit"
             disabled={loading}
-            className={`w-full py-2 rounded-lg text-white text-lg font-bold transition duration-300 ${loading ? "bg-yellow-400 cursor-not-allowed" : "bg-yellow-600 hover:bg-yellow-700"}`}
+            className={`w-full py-3 rounded-lg text-white text-lg font-semibold transition-all duration-300 ${
+              loading ? "bg-blue-300 cursor-not-allowed" : "bg-blue-500 hover:bg-blue-600"
+            }`}
           >
             {loading ? "Logging in..." : "Login"}
           </button>
         </form>
 
-        <div className="text-center text-gray-700 my-6">OR</div>
+        <div className="text-center text-gray-600 my-6">OR</div>
 
-        <div className="flex justify-center space-x-4">
-          <button className="flex items-center space-x-2 bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition duration-300">
-            <FaGoogle /> <span>Google</span>
+        <div className="flex justify-center space-x-6">
+          <button className="flex items-center space-x-2 bg-red-500 text-white px-6 py-3 rounded-lg hover:bg-red-600 transition-all duration-200">
+            <FaGoogle size={20} /> <span>Google</span>
           </button>
-          <button className="flex items-center space-x-2 bg-blue-800 text-white px-4 py-2 rounded-lg hover:bg-blue-900 transition duration-300">
-            <FaFacebook /> <span>Facebook</span>
+          <button className="flex items-center space-x-2 bg-blue-800 text-white px-6 py-3 rounded-lg hover:bg-blue-900 transition-all duration-200">
+            <FaFacebook size={20} /> <span>Facebook</span>
           </button>
         </div>
 
-        <p className="text-center text-gray-700 mt-6">
-          Don't have an account? {" "}
-          <Link to="/register" className="text-yellow-600 hover:underline">
+        <p className="text-center text-gray-600 mt-6">
+          Don't have an account?{" "}
+          <Link to="/register" className="text-blue-500 hover:underline">
             Sign up
           </Link>
         </p>

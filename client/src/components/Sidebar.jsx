@@ -1,6 +1,6 @@
-import React, { useState, useRef, useEffect } from 'react';
-import { Menu, Book, Clock, User, LogOut } from 'lucide-react';
-import { NavLink, useNavigate } from 'react-router-dom';
+import React, { useState, useRef, useEffect } from "react";
+import { Menu, Book, Clock, User, LogOut } from "lucide-react";
+import { NavLink, useNavigate } from "react-router-dom";
 
 const Sidebar = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -22,61 +22,63 @@ const Sidebar = () => {
     };
 
     if (isOpen) {
-      document.addEventListener('mousedown', handleClickOutside);
+      document.addEventListener("mousedown", handleClickOutside);
     }
 
     return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
+      document.removeEventListener("mousedown", handleClickOutside);
     };
   }, [isOpen]);
 
   return (
-    <div className="h-10 bg-yellow-950 flex">
+    <div className="relative">
       {/* Sidebar */}
       <div
         ref={sidebarRef}
-        className={`fixed top-0 left-0 h-full bg-yellow-950 text-white shadow-lg transition-transform transform ${
-          isOpen ? 'translate-x-0' : '-translate-x-full'
-        } w-64 z-50`}
+        className={`fixed top-0 left-0 h-full bg-white text-gray-800 shadow-lg transition-transform transform ${
+          isOpen ? "translate-x-0" : "-translate-x-full"
+        } w-72 z-50 border-r border-gray-200`}
       >
-        <h2 className="text-2xl font-bold mb-6 p-4 border-b border-yellow-700 text-yellow-400">
+        <h2 className="text-2xl font-bold mb-6 p-6 border-b border-gray-200 text-blue-500">
           NewsHub
         </h2>
-        <ul className="space-y-2 p-4">
-          <NavLink to={'/source'}>
+        <ul className="space-y-3 p-6">
+          <NavLink to="/source" onClick={() => setSelectedSection("source")}>
             <button
-              onClick={() => setSelectedSection('source')}
-              className={`flex items-center gap-3 w-full text-left p-3 rounded-lg transition-colors ${
-                selectedSection === 'source' ? 'bg-yellow-800' : 'hover:bg-yellow-700'
+              className={`flex items-center gap-4 w-full text-left p-3 rounded-lg transition-colors ${
+                selectedSection === "source"
+                  ? "bg-blue-50 text-blue-500"
+                  : "text-gray-700 hover:bg-gray-100 hover:text-blue-500"
               }`}
             >
-              <Book className="w-5 h-5 text-yellow-400" />
+              <Book className="w-5 h-5" />
               <p>Source</p>
             </button>
           </NavLink>
-          <NavLink to={'/latest-news'}>
+          <NavLink to="/latest-news" onClick={() => setSelectedSection("latest-news")}>
             <button
-              onClick={() => setSelectedSection('latest-news')}
-              className={`flex items-center gap-3 w-full text-left p-3 rounded-lg transition-colors ${
-                selectedSection === 'latest-news' ? 'bg-yellow-800' : 'hover:bg-yellow-700'
+              className={`flex items-center gap-4 w-full text-left p-3 rounded-lg transition-colors ${
+                selectedSection === "latest-news"
+                  ? "bg-blue-50 text-blue-500"
+                  : "text-gray-700 hover:bg-gray-100 hover:text-blue-500"
               }`}
             >
-              <Clock className="w-5 h-5 text-yellow-400" />
+              <Clock className="w-5 h-5" />
               <p>Latest News</p>
             </button>
           </NavLink>
         </ul>
-        <div className="absolute bottom-4 left-4 right-4 border-t border-yellow-700 pt-4">
-          <div className="flex items-center gap-3 mb-4">
-            <User className="w-5 h-5 text-yellow-400" />
+        <div className="absolute bottom-6 left-6 right-6 border-t border-gray-200 pt-6">
+          <div className="flex items-center gap-4 mb-6">
+            <User className="w-6 h-6 text-gray-500" />
             <div>
-              <p className="font-bold text-yellow-300">Profile</p>
-              <p className="text-sm text-yellow-500">user@example.com</p>
+              <p className="font-semibold text-gray-800">Profile</p>
+              <p className="text-sm text-gray-600">user@example.com</p>
             </div>
           </div>
           <button
             onClick={handleLogout}
-            className="flex items-center gap-3 w-full bg-red-600 text-white p-3 rounded-lg hover:bg-red-700"
+            className="flex items-center gap-4 w-full bg-red-500 text-white p-3 rounded-lg hover:bg-red-600 transition-colors duration-200"
           >
             <LogOut className="w-5 h-5" />
             <span>Log Out</span>
@@ -89,7 +91,7 @@ const Sidebar = () => {
         {!isOpen && (
           <button
             onClick={() => setIsOpen(true)}
-            className="absolute top-4 left-4 bg-yellow-950 text-yellow-400 p-2 rounded-full focus:outline-none z-50 shadow-lg hover:bg-yellow-800"
+            className="fixed top-4 left-4 bg-white text-gray-600 p-2 rounded-full shadow-md hover:bg-gray-100 hover:text-blue-500 focus:outline-none z-50 transition-colors duration-200"
           >
             <Menu size={24} />
           </button>
