@@ -61,15 +61,15 @@ function NewsCard({ article }) {
   {saving ? <BookmarkCheck className="w-4 h-4" /> : <Bookmark className="w-4 h-4" />}
   {saving ? "Saving..." : "Save"}
 </button>
-
+{console.log(article)}
       <a href={article.link} target="_blank" rel="noopener noreferrer">
         <img
           className="w-full h-52 object-cover rounded-xl mb-4"
-          src={article.image_url || "./../assets/react.svg"} // Fallback to placeholder if no image
+          src={article.image_url || article.source_icon} // Fallback to placeholder if no image
           alt={article.title || "News Image"}
         />
       </a>
-      <div className="flex flex-col h-full">
+      <div className="flex flex-col max-h-full">
         <a href={article.link} target="_blank" rel="noopener noreferrer">
           <h5 className="text-xl font-semibold text-gray-800 mb-3 line-clamp-2">
             {article.title || "No title available"}
