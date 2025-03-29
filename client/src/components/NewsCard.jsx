@@ -15,7 +15,7 @@ function NewsCard({ article }) {
       <a href={article.link} target="_blank" rel="noopener noreferrer">
         <img
           className="w-full h-52 object-cover rounded-xl mb-4"
-          src={article.image || "./../assets/react.svg"} // Fallback to placeholder if no image
+          src={article.image_url || "./../assets/react.svg"} // Fallback to placeholder if no image
           alt={article.title || "News Image"}
         />
       </a>

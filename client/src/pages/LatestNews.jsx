@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
+import axios from "axios";
 import NewsCard from "../components/NewsCard";
-
 
 const API_URL = import.meta.env.VITE_API_BACKEND_URL;
 
@@ -9,27 +9,28 @@ const LatestNews = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [language, setLanguage] = useState("en");
+  const [searchTerm, setSearchTerm] = useState("");
 
   useEffect(() => {
-    const token = localStorage.getItem("token");
-    fetch(`${API_URL}/news/lang/${language}`, {
-      headers: { Authorization: `Bearer ${token}` },
-    })
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error("Failed to fetch news articles");
-        }
-        return response.json();
-      })
-      .then((data) => {
-        setArticles(data.results || []);
+    const fetchNews = async () => {
+      const token = localStorage.getItem("token");
+
+      try {
+        const response = await axios.get(`${API_URL}/news/lang/${language}`, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        console.log(response.data.results);
+
+        setArticles(response.data.results);
         setLoading(false);
-      })
-      .catch((err) => {
+      } catch (err) {
         setError(err.message);
         setLoading(false);
-      });
-  }, [language]);
+      }
+    };
+
+    fetchNews();
+  }, [language]); // Add language as a dependency to refetch when language changes
 
   const handleLanguageChange = (e) => {
     setLoading(true);
@@ -40,31 +41,47 @@ const LatestNews = () => {
     e.preventDefault();
     setLoading(true);
 
-    const term = e.target.value;
-    setSearchTerm(term);
+    const term = searchTerm.trim().toLowerCase();
+    if (!term) {
+      // If search term is empty, fetch regular news
+      const token = localStorage.getItem("token");
+      try {
+        const response = await axios.get(`${API_URL}/news/lang/${language}`, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        setArticles(response.data.results);
+      } catch (err) {
+        setError(err.message);
+      } finally {
+        setLoading(false);
+      }
+      return;
+    }
 
     const token = localStorage.getItem("token");
     try {
       const response = await axios.get(
-        `${API_URL}/news/search&searchWord=${term}`,
+        `${API_URL}/news/search?searchWord=${term}`, 
         {
           headers: { Authorization: `Bearer ${token}` },
         }
       );
-      setArticles(response.data);
-      console.log(response.data);
+      setArticles(response.data.results);
     } catch (error) {
-      console.log(error);
-      setError(error);
+      console.error("Search error:", error);
+      setError(error.message);
     } finally {
       setLoading(false);
+      setSearchTerm(""); // Clear search term after search
     }
   };
 
   if (loading)
     return (
       <div className="min-h-screen bg-gradient-to-br from-blue-50 to-gray-100 flex items-center justify-center">
-        <p className="text-gray-700 text-lg font-semibold animate-pulse">Loading news articles...</p>
+        <p className="text-gray-700 text-lg font-semibold animate-pulse">
+          Loading news articles...
+        </p>
       </div>
     );
   if (error)
@@ -78,37 +95,39 @@ const LatestNews = () => {
     <>
       {/* Search Bar */}
       <div className="hidden sm:ml-8 sm:flex sm:flex-1 sm:justify-center">
-                  <form className="relative w-full max-w-2xl mx-auto">
-                    <input
-                      type="text"
-                      className="w-full rounded-full border-gray-300 bg-gray-50 text-gray-800 placeholder-gray-400 py-2.5 pl-12 pr-24 focus:border-blue-500 focus:ring-2 focus:ring-blue-500 focus:outline-none transition-all duration-200"
-                      placeholder="Search trending news..."
-                    />
-                    <button
-                      type="submit"
-                      className="absolute right-2 top-1/2 -translate-y-1/2 bg-blue-500 text-white rounded-full px-4 py-1.5 hover:bg-blue-600 transition-colors duration-200"
-                    >
-                      Search
-                    </button>
-                    <div className="absolute left-4 top-1/2 -translate-y-1/2">
-                      <svg
-                        className="h-5 w-5 text-gray-500"
-                        xmlns="http://www.w3.org/2000/svg"
-                        fill="none"
-                        viewBox="0 0 20 20"
-                        stroke="currentColor"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth="2"
-                          d="M8 4a4 4 0 100 8 4 4 0 000-8zm6 14l-4-4"
-                        />
-                      </svg>
-                    </div>
-                  </form>
-                </div>
-              
+        <form className="relative w-full max-w-2xl mx-auto" onSubmit={handleSearch}>
+          <input
+            type="text"
+            className="w-full rounded-full border-gray-300 bg-gray-50 text-gray-800 placeholder-gray-400 py-2.5 pl-12 pr-24 focus:border-blue-500 focus:ring-2 focus:ring-blue-500 focus:outline-none transition-all duration-200"
+            placeholder="Search trending news..."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+          />
+          <button
+            type="submit"
+            className="absolute right-2 top-1/2 -translate-y-1/2 bg-blue-500 text-white rounded-full px-4 py-1.5 hover:bg-blue-600 transition-colors duration-200"
+          >
+            Search
+          </button>
+          <div className="absolute left-4 top-1/2 -translate-y-1/2">
+            <svg
+              className="h-5 w-5 text-gray-500"
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 20 20"
+              stroke="currentColor"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth="2"
+                d="M8 4a4 4 0 100 8 4 4 0 000-8zm6 14l-4-4"
+              />
+            </svg>
+          </div>
+        </form>
+      </div>
+
       <div className="min-h-screen bg-gradient-to-br from-blue-50 to-gray-100 p-10">
         {/* Language Switcher */}
         <div className="flex justify-end mb-8">
@@ -135,7 +154,7 @@ const LatestNews = () => {
             ))
           ) : (
             <p className="text-gray-600 text-center col-span-full">
-              No articles available for this language.
+              No articles available for your search or selected language.
             </p>
           )}
         </div>
