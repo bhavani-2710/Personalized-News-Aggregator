@@ -5,6 +5,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { setUser } from "../redux/userSlice";
 
+
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -26,7 +27,7 @@ const Login = () => {
     setLoading(true);
 
     try {
-      let API_BASE_URL = "http://localhost:5000";
+      let API_BASE_URL = import.meta.env.VITE_API_BACKEND_URL;
       const response = await axios.post(`${API_BASE_URL}/users/login`, { email, password });
       
       if (response.data.message === "Login Successfull") {
