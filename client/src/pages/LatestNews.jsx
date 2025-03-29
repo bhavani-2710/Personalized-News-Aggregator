@@ -8,11 +8,16 @@ import Footer from "../components/Footer";
 const API_URL = import.meta.env.VITE_API_BACKEND_URL;
 
 const LatestNews = () => {
-  const [articles, setArticles] = useState([]);
+  const [allArticles, setAllArticles] = useState([]);
+  const [filteredArticles, setFilteredArticles] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [language, setLanguage] = useState("en");
   const [dateFilter, setDateFilter] = useState("");
+  
+  // Pagination state
+  const [currentPage, setCurrentPage] = useState(1);
+  const [articlesPerPage] = useState(8);
 
   useEffect(() => {
     const fetchNews = async () => {
@@ -20,19 +25,14 @@ const LatestNews = () => {
       setLoading(true);
 
       try {
-        let url = `${API_URL}/news/lang/${language}`;
-        const params = {};
-
-        if (dateFilter) {
-          params.date = dateFilter;
-        }
-
+        // Only filter by language on the backend
+        const url = `${API_URL}/news/lang/${language}`;
+        
         const response = await axios.get(url, {
           headers: { Authorization: `Bearer ${token}` },
-          params,
         });
 
-        setArticles(response.data.results);
+        setAllArticles(response.data.results);
         setLoading(false);
       } catch (err) {
         setError(err.message);
@@ -41,7 +41,58 @@ const LatestNews = () => {
     };
 
     fetchNews();
-  }, [language, dateFilter]);
+  }, [language]); // Only re-fetch when language changes
+
+  // Apply date filtering in frontend
+  useEffect(() => {
+    if (allArticles.length === 0) return;
+    
+    let filtered = [...allArticles];
+    
+    if (dateFilter) {
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+      
+      switch (dateFilter) {
+        case 'today':
+          filtered = filtered.filter(article => {
+            const pubDate = new Date(article.pubDate);
+            return pubDate >= today;
+          });
+          break;
+        case 'yesterday':
+          const yesterday = new Date(today);
+          yesterday.setDate(yesterday.getDate() - 1);
+          filtered = filtered.filter(article => {
+            const pubDate = new Date(article.pubDate);
+            return pubDate >= yesterday && pubDate < today;
+          });
+          break;
+        case 'last7days':
+          const last7Days = new Date(today);
+          last7Days.setDate(last7Days.getDate() - 7);
+          filtered = filtered.filter(article => {
+            const pubDate = new Date(article.pubDate);
+            return pubDate >= last7Days;
+          });
+          break;
+        case 'last30days':
+          const last30Days = new Date(today);
+          last30Days.setDate(last30Days.getDate() - 30);
+          filtered = filtered.filter(article => {
+            const pubDate = new Date(article.pubDate);
+            return pubDate >= last30Days;
+          });
+          break;
+        default:
+          // No filter or unrecognized filter
+          break;
+      }
+    }
+    
+    setFilteredArticles(filtered);
+    setCurrentPage(1); // Reset to first page when filters change
+  }, [allArticles, dateFilter]);
 
   const handleLanguageChange = (e) => {
     setLanguage(e.target.value);
@@ -50,6 +101,23 @@ const LatestNews = () => {
   const handleDateChange = (e) => {
     setDateFilter(e.target.value);
   };
+
+  // Get current articles for pagination
+  const indexOfLastArticle = currentPage * articlesPerPage;
+  const indexOfFirstArticle = indexOfLastArticle - articlesPerPage;
+  const currentArticles = filteredArticles.slice(indexOfFirstArticle, indexOfLastArticle);
+
+  // Change page
+  const paginate = (pageNumber) => setCurrentPage(pageNumber);
+  
+  // Calculate total pages
+  const totalPages = Math.ceil(filteredArticles.length / articlesPerPage);
+  
+  // Generate page numbers array
+  const pageNumbers = [];
+  for (let i = 1; i <= totalPages; i++) {
+    pageNumbers.push(i);
+  }
 
   if (loading)
     return (
@@ -116,8 +184,8 @@ const LatestNews = () => {
           Latest News
         </h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-10 justify-items-center">
-          {articles.length > 0 ? (
-            articles.map((article, index) => (
+          {currentArticles.length > 0 ? (
+            currentArticles.map((article, index) => (
               <NewsCard key={index} article={article} />
             ))
           ) : (
@@ -126,6 +194,52 @@ const LatestNews = () => {
             </p>
           )}
         </div>
+        
+        {/* Pagination Controls */}
+        {filteredArticles.length > articlesPerPage && (
+          <div className="mt-10 flex justify-center">
+            <nav className="flex items-center">
+              <button
+                onClick={() => paginate(currentPage > 1 ? currentPage - 1 : 1)}
+                disabled={currentPage === 1}
+                className={`mx-1 px-3 py-2 rounded-md ${
+                  currentPage === 1
+                    ? "bg-gray-700 text-gray-400 cursor-not-allowed"
+                    : "bg-gray-800 text-gray-300 hover:bg-gray-700 cursor-pointer"
+                }`}
+              >
+                Previous
+              </button>
+              
+              {pageNumbers.map(number => (
+                <button
+                  key={number}
+                  onClick={() => paginate(number)}
+                  className={`mx-1 px-4 py-2 rounded-md cursor-pointer ${
+                    currentPage === number
+                      ? "bg-blue-600 text-white"
+                      : "bg-gray-800 text-gray-300 hover:bg-gray-700"
+                  }`}
+                >
+                  {number}
+                </button>
+              ))}
+              
+              <button
+                onClick={() => paginate(currentPage < totalPages ? currentPage + 1 : totalPages)}
+                disabled={currentPage === totalPages || totalPages === 0}
+                className={`mx-1 px-3 py-2 rounded-md ${
+                  currentPage === totalPages || totalPages === 0
+                    ? "bg-gray-700 text-gray-400 cursor-not-allowed"
+                    : "bg-gray-800 text-gray-300 hover:bg-gray-700 cursor-pointer"
+                }`}
+              >
+                Next
+              </button>
+            </nav>
+          </div>
+        )}
+        
       </div>
       <Footer />
     </>
