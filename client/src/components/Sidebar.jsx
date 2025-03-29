@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
-import { Menu, Book, Clock, User, LogOut } from "lucide-react";
+import { Menu, Book, Clock, User, LogOut, Home, Bookmark } from "lucide-react";
 import { NavLink, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { clearUser } from "../redux/userSlice";
@@ -48,6 +48,21 @@ const Sidebar = () => {
           NewsHub
         </h2>
         <ul className="space-y-3 p-6">
+          {/* Home */}
+          <NavLink to="/home" onClick={() => setSelectedSection("home")}>
+            <button
+              className={`flex items-center gap-4 w-full text-left p-3 rounded-lg transition-colors ${
+                selectedSection === "home"
+                  ? "bg-blue-50 text-blue-500"
+                  : "text-gray-700 hover:bg-gray-100 hover:text-blue-500"
+              }`}
+            >
+              <Home className="w-5 h-5" />
+              <p>Home</p>
+            </button>
+          </NavLink>
+
+          {/* Source */}
           <NavLink to="/source" onClick={() => setSelectedSection("source")}>
             <button
               className={`flex items-center gap-4 w-full text-left p-3 rounded-lg transition-colors ${
@@ -60,6 +75,8 @@ const Sidebar = () => {
               <p>Source</p>
             </button>
           </NavLink>
+
+          {/* Latest News */}
           <NavLink
             to="/latest-news"
             onClick={() => setSelectedSection("latest-news")}
@@ -75,7 +92,26 @@ const Sidebar = () => {
               <p>Latest News</p>
             </button>
           </NavLink>
+
+          {/* Saved News */}
+          <NavLink
+            to="/saved-news"
+            onClick={() => setSelectedSection("saved-news")}
+          >
+            <button
+              className={`flex items-center gap-4 w-full text-left p-3 rounded-lg transition-colors ${
+                selectedSection === "saved-news"
+                  ? "bg-blue-50 text-blue-500"
+                  : "text-gray-700 hover:bg-gray-100 hover:text-blue-500"
+              }`}
+            >
+              <Bookmark className="w-5 h-5" />
+              <p>Saved News</p>
+            </button>
+          </NavLink>
         </ul>
+
+        {/* User Info & Logout */}
         <div className="absolute bottom-6 left-6 right-6 border-t border-gray-200 pt-6">
           <div className="flex items-center gap-4 mb-6">
             <User className="w-6 h-6 text-gray-500" />
