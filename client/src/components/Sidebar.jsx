@@ -50,7 +50,7 @@ const Sidebar = () => {
           {/* Sidebar Links */}
           {["home", "sources", "latest-news", "saved"].map((item, index) => {
             const icons = [Home, Book, Clock, Bookmark];
-            const labels = ["Home", "Source", "Latest", "Saved"];
+            const labels = ["Home", "Sources", "Latest", "Saved"];
             const Icon = icons[index];
             return (
               <NavLink key={item} to={`/${item}`} onClick={() => setSelectedSection(item)}>
