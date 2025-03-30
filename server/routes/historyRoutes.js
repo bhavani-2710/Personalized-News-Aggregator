@@ -187,7 +187,7 @@ router.get("/recommendations/:user_id", async (req, res) => {
           country: article.country,
           category: article.category,
           link: article.link,
-          image: article.image_url,
+          image_url: article.image_url,
           pubDate: article.pubDate,
         })),
       });
