@@ -29,15 +29,15 @@ const Card = ({ article }) => {
         return;
       }
 
-      await axios.post(
-        `${API_URL}/news/save`,
-        { article },
+      const response = await axios.post(
+        `${API_URL}/history/save-news`,
+        { sources: [article] },
         {
           headers: { Authorization: `Bearer ${token}` },
         }
       );
-
-      alert("Article saved successfully!");
+      console.log(response.data)
+      alert("Source saved successfully!");
     } catch (err) {
       setError(err.response?.data?.message || "Failed to save article.");
     } finally {
@@ -57,7 +57,7 @@ const Card = ({ article }) => {
         className={`absolute top-4 right-4 flex items-center gap-1 px-3 py-1.5 text-sm font-medium rounded-lg transition-all duration-200 ${
           saving
             ? "bg-gray-300 text-gray-600 cursor-not-allowed"
-            : "bg-blue-500 text-white hover:bg-blue-600 focus:ring-2 focus:ring-blue-300"
+            : "bg-blue-500 text-white hover:bg-blue-600 focus:ring-2 focus:ring-blue-300 cursor-pointer"
         }`}
       >
         {saving ? <BookmarkCheck className="w-4 h-4" /> : <Bookmark className="w-4 h-4" />}

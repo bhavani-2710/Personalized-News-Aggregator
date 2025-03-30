@@ -29,14 +29,15 @@ function NewsCard({ article }) {
       }
 
       // API call to save the article
-      await axios.post(
-        `${API_URL}/news/save`,
-        { article }, // Sending the entire article object to the backend
+      const response = await axios.post(
+        `${API_URL}/history/save-news`,
+        { articles: [article] }, // Sending the entire article object to the backend
         {
           headers: { Authorization: `Bearer ${token}` },
         }
       );
 
+      console.log(response.data);
       // Optionally, you can show a success message or update UI to indicate the article is saved
       alert("Article saved successfully!");
     } catch (err) {
@@ -50,18 +51,22 @@ function NewsCard({ article }) {
     <div className="bg-white rounded-2xl p-6 w-full max-w-[360px] min-h-[460px] shadow-md transition-all duration-300 hover:shadow-lg hover:-translate-y-2 border border-gray-200 relative">
       {/* Save Button - Positioned at top-right */}
       <button
-  onClick={handleSave}
-  disabled={saving}
-  className={`absolute top-4 right-4 flex items-center gap-1 px-3 py-1.5 text-sm font-medium rounded-lg transition-all duration-200 ${
-    saving
-      ? "bg-gray-300 text-gray-600 cursor-not-allowed"
-      : "bg-blue-500 text-white hover:bg-blue-600 focus:ring-2 focus:ring-blue-300"
-  }`}
->
-  {saving ? <BookmarkCheck className="w-4 h-4" /> : <Bookmark className="w-4 h-4" />}
-  {saving ? "Saving..." : "Save"}
-</button>
-{console.log(article)}
+        onClick={handleSave}
+        disabled={saving}
+        className={`absolute top-4 right-4 flex items-center gap-1 px-3 py-1.5 text-sm font-medium rounded-lg transition-all duration-200 ${
+          saving
+            ? "bg-gray-300 text-gray-600 cursor-not-allowed"
+            : "bg-blue-500 text-white hover:bg-blue-600 focus:ring-2 focus:ring-blue-300 cursor-pointer"
+        }`}
+      >
+        {saving ? (
+          <BookmarkCheck className="w-4 h-4" />
+        ) : (
+          <Bookmark className="w-4 h-4" />
+        )}
+        {saving ? "Saving..." : "Save"}
+      </button>
+
       <a href={article.link} target="_blank" rel="noopener noreferrer">
         <img
           className="w-full h-52 object-cover rounded-xl mb-4"
