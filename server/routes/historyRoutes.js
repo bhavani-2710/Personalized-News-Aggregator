@@ -130,12 +130,12 @@ router.get("/recommendations/:user_id", async (req, res) => {
     const API_KEY = process.env.API_KEY;
 
     // Fetch sources
-    const sourcesUrl = `https://newsdata.io/api/1/sources?apikey=${API_KEY}&language=en`;
+    const sourcesUrl = `https://newsdata.io/api/1/sources?apikey=${API_KEY}&language=en&country=in`;
     const sourcesResponse = await axios.get(sourcesUrl);
     const allSources = sourcesResponse.data.results || [];
 
     // Fetch latest news
-    const newsUrl = `https://newsdata.io/api/1/latest?apikey=${API_KEY}&language=en`;
+    const newsUrl = `https://newsdata.io/api/1/latest?apikey=${API_KEY}&language=en&country=in`;
     const newsResponse = await axios.get(newsUrl);
     const latestArticles = newsResponse.data.results || [];
 
@@ -219,7 +219,7 @@ router.get("/recommendations/:user_id", async (req, res) => {
         description: article.description,
         source: article.source_id,
         link: article.link,
-        image: article.image_url,
+        image_url: article.image_url,
         pubDate: article.pubDate,
       }));
 
@@ -234,7 +234,7 @@ router.get("/recommendations/:user_id", async (req, res) => {
           description: article.description,
           source: article.source_id,
           link: article.link,
-          image: article.image_url,
+          image_url: article.image_url,
           pubDate: article.pubDate,
         })),
     ];

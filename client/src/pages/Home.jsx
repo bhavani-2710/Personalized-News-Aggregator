@@ -137,7 +137,7 @@ const Home = () => {
       <div className="min-h-screen bg-gray-900 p-10 text-white">
         {/* Search & Filters */}
         <div className="flex flex-col w-auto ml-50 md:flex-row items-end gap-4 mb-6">
-          <form onSubmit={handleSearch} className="relative w-full md:w-2/3">
+          {/* <form onSubmit={handleSearch} className="relative w-full md:w-2/3">
             <input
               type="text"
               value={searchTerm}
@@ -154,10 +154,10 @@ const Home = () => {
             <span className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-500 dark:text-gray-400">
               🔍
             </span>
-          </form>
+          </form> */}
           
           {/* Filters */}
-          <div className="flex ml-40 flex-end gap-6">
+          {/* <div className="flex ml-40 flex-end gap-6">
             <select
               id="language-filter"
               value={language}
@@ -187,7 +187,7 @@ const Home = () => {
               <option value="last7days">Last 7 Days</option>
               <option value="last30days">Last 30 Days</option>
             </select>
-          </div>
+          </div> */}
         </div>
 
         {/* Search Results Section */}
