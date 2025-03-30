@@ -45,12 +45,17 @@ const Source = () => {
     
     // Filter by search term if one exists
     if (searchTerm.trim()) {
-      const term = searchTerm.trim().toLowerCase();
+      // Split the search terms by spaces to handle multi-word searches
+      const terms = searchTerm.trim().toLowerCase().split(/\s+/);
+      
+      // Filter articles that match ALL terms (not necessarily as a single phrase)
       results = results.filter(article => 
-        (article.title && article.title.toLowerCase().includes(term)) ||
-        (article.description && article.description.toLowerCase().includes(term)) ||
-        (article.source_id && article.source_id.toLowerCase().includes(term)) ||
-        (article.source_name && article.source_name.toLowerCase().includes(term))
+        terms.every(term => 
+          (article.title && article.title.toLowerCase().includes(term)) ||
+          (article.description && article.description.toLowerCase().includes(term)) ||
+          (article.source_id && article.source_id.toLowerCase().includes(term)) ||
+          (article.source_name && article.source_name.toLowerCase().includes(term))
+        )
       );
     }
     

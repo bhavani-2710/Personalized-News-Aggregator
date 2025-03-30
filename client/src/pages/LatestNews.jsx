@@ -2,8 +2,8 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import NewsCard from "../components/NewsCard";
 import Sidebar from "../components/Sidebar";
-import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
+import Navbar from "../components/Navbar";
 
 const API_URL = import.meta.env.VITE_API_BACKEND_URL;
 
@@ -14,10 +14,14 @@ const LatestNews = () => {
   const [error, setError] = useState(null);
   const [language, setLanguage] = useState("en");
   const [dateFilter, setDateFilter] = useState("");
+  const [articles, setArticles] = useState([]);
+  const [pageNumbers, setPageNumbers] = useState([]); 
+  const [totalPages, setTotalPages] = useState(0);
   
   // Pagination state
   const [currentPage, setCurrentPage] = useState(1);
   const [articlesPerPage] = useState(8);
+  const [searchTerm, setSearchTerm] = useState("");
 
   useEffect(() => {
     const fetchNews = async () => {
@@ -94,6 +98,27 @@ const LatestNews = () => {
     setCurrentPage(1); // Reset to first page when filters change
   }, [allArticles, dateFilter]);
 
+  // Update articles based on filteredArticles and pagination
+  useEffect(() => {
+    // Calculate pagination
+    const indexOfLastArticle = currentPage * articlesPerPage;
+    const indexOfFirstArticle = indexOfLastArticle - articlesPerPage;
+    const currentArticles = filteredArticles.slice(indexOfFirstArticle, indexOfLastArticle);
+    
+    // Update articles state
+    setArticles(currentArticles);
+    
+    // Update pagination numbers
+    const totalPages = Math.ceil(filteredArticles.length / articlesPerPage);
+    setTotalPages(totalPages);
+    
+    const pageNumbers = [];
+    for (let i = 1; i <= totalPages; i++) {
+      pageNumbers.push(i);
+    }
+    setPageNumbers(pageNumbers);
+  }, [filteredArticles, currentPage, articlesPerPage]);
+
   const handleLanguageChange = (e) => {
     setLanguage(e.target.value);
   };
@@ -102,22 +127,27 @@ const LatestNews = () => {
     setDateFilter(e.target.value);
   };
 
-  // Get current articles for pagination
-  const indexOfLastArticle = currentPage * articlesPerPage;
-  const indexOfFirstArticle = indexOfLastArticle - articlesPerPage;
-  const currentArticles = filteredArticles.slice(indexOfFirstArticle, indexOfLastArticle);
+  const handleSearch = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+    try {
+      const token = localStorage.getItem("token");
+      const response = await axios.get(`${API_URL}/news/search`, {
+        headers: { Authorization: `Bearer ${token}` },
+        params: { searchWord: searchTerm.trim().toLowerCase(), date: dateFilter, language },
+      });
+      setFilteredArticles(response.data.results); // Update filteredArticles instead of articles directly
+    } catch (error) {
+      setError(error.message);
+    } finally {
+      setLoading(false);
+      setSearchTerm("");
+    }
+  };
 
-  // Change page
-  const paginate = (pageNumber) => setCurrentPage(pageNumber);
-  
-  // Calculate total pages
-  const totalPages = Math.ceil(filteredArticles.length / articlesPerPage);
-  
-  // Generate page numbers array
-  const pageNumbers = [];
-  for (let i = 1; i <= totalPages; i++) {
-    pageNumbers.push(i);
-  }
+  const paginate = (pageNumber) => {
+    setCurrentPage(pageNumber);
+  };
 
   if (loading)
     return (
@@ -136,63 +166,77 @@ const LatestNews = () => {
 
   return (
     <>
-      <Navbar />
       <Sidebar />
+      <Navbar/>
       <div className="min-h-screen bg-gray-900 p-10 text-white">
-        <div className="px-6 py-4">
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-            <div className="flex items-center mr-10 gap-8">
-              <div className="w-auto">
-                <select
-                  id="language-filter"
-                  value={language}
-                  onChange={handleLanguageChange}
-                  className="bg-gray-800 text-gray-300 p-2.5 rounded-lg border border-gray-700 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-400 transition-all duration-200"
-                >
-                  <option value="en">English</option>
-                  <option value="hi">Hindi</option>
-                  <option value="mr">Marathi</option>
-                  <option value="ta">Tamil</option>
-                  <option value="te">Telugu</option>
-                  <option value="ml">Malayalam</option>
-                  <option value="kn">Kannada</option>
-                  <option value="pa">Punjabi</option>
-                  <option value="bn">Bengali</option>
-                  <option value="gu">Gujarati</option>
-                </select>
-              </div>
-
-              <div className="w-auto">
-                <select
-                  id="date-filter"
-                  value={dateFilter}
-                  onChange={handleDateChange}
-                  className="bg-gray-800 text-gray-300 p-2.5 rounded-lg border border-gray-700 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-400 transition-all duration-200"
-                >
-                  <option value="">All Time</option>
-                  <option value="today">Today</option>
-                  <option value="yesterday">Yesterday</option>
-                  <option value="last7days">Last 7 Days</option>
-                  <option value="last30days">Last 30 Days</option>
-                </select>
-              </div>
+        <div className="max-w-7xl mx-auto">
+          
+          {/* Search & Filters */}
+          <div className="flex flex-col w-full ml-50 mt-[-60px] md:flex-row items-end gap-4 mb-6">
+         
+            <form onSubmit={handleSearch} className="relative w-full md:w-2/3">
+              <input
+                type="text"
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="w-full rounded-full bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 py-3 px-5 pl-12 shadow-md focus:ring-2 focus:ring-blue-500 focus:outline-none transition"
+                placeholder="Search news..."
+              />
+              <button type="submit" className="absolute right-4 top-1/2 transform -translate-y-1/2 bg-blue-500 text-white px-4 py-1.5 rounded-full hover:bg-blue-600 transition">
+                Search
+              </button>
+              <span className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-500 dark:text-gray-400">
+                🔍
+              </span>
+            </form>
+            
+            {/* Filters */}
+            <div className="flex ml-40 flex-end gap-6">
+              <select
+                id="language-filter"
+                value={language}
+                onChange={handleLanguageChange}
+                className="bg-gray-800 text-gray-300 p-2.5 rounded-lg border border-gray-700 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-400 transition-all duration-200"
+              >
+                <option value="en">English</option>
+                <option value="hi">Hindi</option>
+                <option value="mr">Marathi</option>
+                <option value="ta">Tamil</option>
+                <option value="te">Telugu</option>
+                <option value="ml">Malayalam</option>
+                <option value="kn">Kannada</option>
+                <option value="pa">Punjabi</option>
+                <option value="bn">Bengali</option>
+                <option value="gu">Gujarati</option>
+              </select>
+              <select
+                id="date-filter"
+                value={dateFilter}
+                onChange={handleDateChange}
+                className="bg-gray-800 text-gray-300 p-2.5 rounded-lg border border-gray-700 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-400 transition-all duration-200"
+              >
+                <option value="">All Time</option>
+                <option value="today">Today</option>
+                <option value="yesterday">Yesterday</option>
+                <option value="last7days">Last 7 Days</option>
+                <option value="last30days">Last 30 Days</option>
+              </select>
             </div>
           </div>
-        </div>
-
-        <h2 className="text-gray-300 text-3xl mt-12 mb-8 font-bold tracking-tight text-center">
-          Latest News
-        </h2>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-10 justify-items-center">
-          {currentArticles.length > 0 ? (
-            currentArticles.map((article, index) => (
-              <NewsCard key={index} article={article} />
-            ))
-          ) : (
-            <p className="text-gray-500 text-center col-span-full">
-              No articles available for your search or selected filters.
-            </p>
-          )}
+          <h2 className="text-gray-300 text-3xl mt-6 mb-8 font-bold tracking-tight text-center">
+            Latest News
+          </h2>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-10 justify-items-center">
+            {articles.length > 0 ? (
+              articles.map((article, index) => (
+                <NewsCard key={index} article={article} />
+              ))
+            ) : (
+              <p className="text-gray-500 text-center col-span-full">
+                No articles available for your search or selected filters.
+              </p>
+            )}
+          </div>
         </div>
         
         {/* Pagination Controls */}

@@ -48,9 +48,9 @@ const Sidebar = () => {
         </h2>
         <ul className="space-y-3 p-6">
           {/* Sidebar Links */}
-          {["home", "source", "latest-news", "saved-news"].map((item, index) => {
+          {["home", "sources", "latest-news", "saved"].map((item, index) => {
             const icons = [Home, Book, Clock, Bookmark];
-            const labels = ["Home", "Source", "Latest News", "Saved News"];
+            const labels = ["Home", "Source", "Latest", "Saved"];
             const Icon = icons[index];
             return (
               <NavLink key={item} to={`/${item}`} onClick={() => setSelectedSection(item)}>

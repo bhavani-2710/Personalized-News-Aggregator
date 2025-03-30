@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from "react";
 import NewsCard from "../components/NewsCard";
-import Navbar from "../components/Navbar";
 import { useLocation } from "react-router-dom";
 import axios from "axios";
+
+import Sidebar from "../components/Sidebar";
 
 const API_URL = import.meta.env.VITE_API_BACKEND_URL;
 
@@ -10,63 +11,116 @@ const DomainNews = () => {
   const [articles, setArticles] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [language, setLanguage] = useState("en");
+  const [searchTerm, setSearchTerm] = useState("");
+  const [dateFilter, setDateFilter] = useState("");
+  const [page, setPage] = useState(1);
+  const [noArticlesReason, setNoArticlesReason] = useState("");
 
   const location = useLocation();
   const domain = location.state?.domain;
   const name = location.state?.name;
 
   useEffect(() => {
-    const fetchNews = async () => {
-      const token = localStorage.getItem("token");
-
-      try {
-        const response = await axios.get(`${API_URL}/news/${domain}`, {
-          headers: { Authorization: `Bearer ${token}` },
-        });
-
-        setArticles(response.data?.results);
-      } catch (err) {
-        setError(err.message);
-      } finally {
-        setLoading(false);
-      }
-    };
-
     fetchNews();
-  }, [language]);
+  }, [dateFilter, page, domain]);
 
-  const handleLanguageChange = (e) => {
+  const fetchNews = async () => {
     setLoading(true);
-    setLanguage(e.target.value);
-  };
-
-  const handleSearch = async (e) => {
-    e.preventDefault();
-    setLoading(true);
-
-    const term = e.target.value;
-    setSearchTerm(term);
-
+    setNoArticlesReason(""); // Reset the reason
     const token = localStorage.getItem("token");
+
     try {
-      const response = await axios.get(
-        `${API_URL}/news/search&searchWord=${term}`,
-        {
-          headers: { Authorization: `Bearer ${token}` },
+      const params = {};
+      if (dateFilter) params.date = dateFilter;
+      params.page = page;
+
+      const response = await axios.get(`${API_URL}/news/${domain}`, {
+        headers: { Authorization: `Bearer ${token}` },
+        params
+      });
+
+      const results = response.data?.results || [];
+      
+      // If it's the first page, replace all articles
+      // If it's a subsequent page, append the new articles
+      if (page === 1) {
+        setArticles(results);
+      } else {
+        setArticles(prevArticles => [...prevArticles, ...results]);
+      }
+      
+      // Check if we have no articles and set an appropriate reason
+      if (results.length === 0 && page === 1) {
+        if (dateFilter) {
+          setNoArticlesReason(`No articles available for the selected time period.`);
+        } else {
+          setNoArticlesReason(`No articles available for this source.`);
         }
-      );
-      setArticles(response.data);
-      console.log(response.data);
-    } catch (error) {
-      console.log(error);
-      setError(error);
+      }
+    } catch (err) {
+      setError(err.message || "An error occurred while fetching news");
+      console.error("Fetch error:", err);
     } finally {
       setLoading(false);
     }
   };
 
-  if (loading)
+  const handleDateChange = (e) => {
+    setDateFilter(e.target.value);
+    setPage(1); // Reset to first page when changing date filter
+  };
+  
+  const handleSearch = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+    setNoArticlesReason(""); // Reset the reason
+    setPage(1); // Reset to first page when searching
+
+    const term = searchTerm.trim().toLowerCase();
+    const token = localStorage.getItem("token");
+
+    try {
+      if (!term) {
+        // If search term is empty, fetch regular domain news with current filters
+        await fetchNews();
+      } else {
+        // Search with term and apply filters
+        const params = { 
+          searchWord: term,
+          domain: domain // Add domain to search parameters
+        };
+        
+        if (dateFilter) params.date = dateFilter;
+
+        const response = await axios.get(
+          `${API_URL}/news/search`,
+          {
+            headers: { Authorization: `Bearer ${token}` },
+            params
+          }
+        );
+        
+        const results = response.data.results || [];
+        setArticles(results);
+        
+        // Check if we have no articles and set an appropriate reason for search
+        if (results.length === 0) {
+          setNoArticlesReason(`No search results found for "${term}".`);
+        }
+      }
+    } catch (error) {
+      console.error("Search error:", error);
+      setError(error.message || "An error occurred while searching");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleLoadMore = () => {
+    setPage(prevPage => prevPage + 1);
+  };
+
+  if (loading && page === 1) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-blue-50 to-gray-100 flex items-center justify-center">
         <p className="text-gray-700 text-lg font-semibold animate-pulse">
@@ -74,48 +128,101 @@ const DomainNews = () => {
         </p>
       </div>
     );
-  if (error)
+  }
+
+  if (error && articles.length === 0) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-blue-50 to-gray-100 flex items-center justify-center">
         <p className="text-red-500 text-lg font-semibold">Error: {error}</p>
       </div>
     );
+  }
 
   return (
-    <>
-      <Navbar />
-      <div className="min-h-screen bg-gradient-to-br from-blue-50 to-gray-100 p-10">
-        {/* Language Switcher */}
-        <div className="flex justify-end mb-8">
-          <select
-            value={language}
-            onChange={handleLanguageChange}
-            className="bg-white text-gray-800 p-3 rounded-lg border border-gray-300 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all duration-200"
-          >
-            <option value="en">English</option>
-            <option value="es">Spanish</option>
-            <option value="fr">French</option>
-            {/* Add more languages as needed */}
-          </select>
+    <div className="flex flex-col min-h-screen bg-gradient-to-br from-blue-50 to-gray-100">
+      <Sidebar></Sidebar>
+      <div className="container mx-auto px-4 py-6">
+        {/* Search and Filter Section */}
+        <div className="flex flex-col justify-end w-full  md:flex-row items-end gap-4 mb-6">
+          <form onSubmit={handleSearch} className="relative w-full md:w-2/3">
+            <input
+              type="text"
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className="w-full rounded-full bg-white dark:bg-gray-800 text-white border border-gray-300 dark:border-gray-700 py-3 px-5 pl-12 shadow-md focus:ring-2 focus:ring-blue-500 focus:outline-none transition"
+              placeholder="Search news..."
+            />
+            <button 
+              type="submit" 
+              className="absolute right-4 top-1/2 transform -translate-y-1/2 bg-blue-500 text-white px-4 py-1.5 rounded-full hover:bg-blue-600 transition"
+            >
+              Search
+            </button>
+            <span className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-500 dark:text-gray-400">
+              🔍
+            </span>
+          </form>
+          
+          {/* Date Filter Only */}
+          <div className="flex flex-end gap-4">
+            <select
+              id="date-filter"
+              value={dateFilter}
+              onChange={handleDateChange}
+              className="bg-gray-800 text-gray-300 p-2.5 rounded-lg border border-gray-700 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-400 transition-all duration-200"
+            >
+              <option value="">All Time</option>
+              <option value="today">Today</option>
+              <option value="yesterday">Yesterday</option>
+              <option value="last7days">Last 7 Days</option>
+              <option value="last30days">Last 30 Days</option>
+            </select>
+          </div>
         </div>
 
-        {/* Latest News Section */}
-        <h2 className="text-gray-800 text-3xl mt-4 mb-8 font-bold tracking-tight text-center">
-          Latest News by {name}
-        </h2>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-10 justify-items-center">
-          {articles?.length > 0 ? (
-            articles.map((article, index) => (
-              <NewsCard key={index} article={article} />
-            ))
-          ) : (
-            <p className="text-gray-600 text-center col-span-full">
-              No articles available for this source.
-            </p>
+        {/* News Section */}
+        <div className="bg-gradient-to-br from-blue-50 to-gray-100 p-4">
+          {/* Latest News Header */}
+          <h2 className="text-gray-800 text-3xl mt-4 mb-8 font-bold tracking-tight text-center">
+            Latest News by {name || domain}
+          </h2>
+          
+          {/* News Grid */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-10 justify-items-center">
+            {articles?.length > 0 ? (
+              articles.map((article, index) => (
+                <NewsCard key={`${article.id || index}`} article={article} />
+              ))
+            ) : (
+              <div className="text-center col-span-full py-8">
+                <p className="text-gray-600 text-lg mb-3">
+                  {noArticlesReason}
+                </p>
+              </div>
+            )}
+          </div>
+          
+          {/* Load More Button */}
+          {articles.length > 0 && !loading && (
+            <div className="flex justify-center mt-8">
+              <button
+                onClick={handleLoadMore}
+                className="px-6 py-2 bg-blue-600 text-white rounded-full hover:bg-blue-700 transition-colors duration-300 shadow-md"
+              >
+                {loading ? "Loading..." : "Load More"}
+              </button>
+            </div>
+          )}
+          
+          {/* Loading indicator for pagination */}
+          {loading && page > 1 && (
+            <div className="text-center mt-4">
+              <p className="text-gray-600 animate-pulse">Loading more articles...</p>
+            </div>
           )}
         </div>
       </div>
-    </>
+    </div>
   );
 };
 
