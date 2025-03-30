@@ -33,7 +33,7 @@ const Login = () => {
       if (response.data.message === "Login Successfull") {
         localStorage.setItem("token", response.data.token);
         dispatch(setUser(response.data.user));
-        navigate("/source");
+        navigate("/sources");
       }
     } catch (error) {
       setError(error.response?.data?.error || "Login Failed");
