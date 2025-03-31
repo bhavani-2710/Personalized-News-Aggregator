@@ -164,130 +164,129 @@ const LatestNews = () => {
       </div>
     );
 
-  return (
-    <>
-      <Sidebar />
-      <Navbar/>
-      <div className="min-h-screen bg-gray-900 p-10 text-white">
-        <div className="max-w-7xl mx-auto">
-          
-          {/* Search & Filters */}
-          <div className="flex flex-col w-full ml-50 mt-[-60px] md:flex-row items-end gap-4 mb-6">
-         
-            <form onSubmit={handleSearch} className="relative w-full md:w-2/3">
-              <input
-                type="text"
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full rounded-full bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 py-3 px-5 pl-12 shadow-md focus:ring-2 focus:ring-blue-500 focus:outline-none transition"
-                placeholder="Search news..."
-              />
-              <button type="submit" className="absolute right-4 top-1/2 transform -translate-y-1/2 bg-blue-500 text-white px-4 py-1.5 rounded-full hover:bg-blue-600 transition">
-                Search
-              </button>
-              <span className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-500 dark:text-gray-400">
-                🔍
-              </span>
-            </form>
+    return (
+      <>
+        <Sidebar />
+        <Navbar/>
+        <div className="min-h-screen bg-gray-900 p-10 text-white">
+          <div className="max-w-7xl mx-auto">
             
-            {/* Filters */}
-            <div className="flex ml-40 flex-end gap-6">
-              <select
-                id="language-filter"
-                value={language}
-                onChange={handleLanguageChange}
-                className="bg-gray-800 text-gray-300 p-2.5 rounded-lg border border-gray-700 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-400 transition-all duration-200"
-              >
-                <option value="en">English</option>
-                <option value="hi">Hindi</option>
-                <option value="mr">Marathi</option>
-                <option value="ta">Tamil</option>
-                <option value="te">Telugu</option>
-                <option value="ml">Malayalam</option>
-                <option value="kn">Kannada</option>
-                <option value="pa">Punjabi</option>
-                <option value="bn">Bengali</option>
-                <option value="gu">Gujarati</option>
-              </select>
-              <select
-                id="date-filter"
-                value={dateFilter}
-                onChange={handleDateChange}
-                className="bg-gray-800 text-gray-300 p-2.5 rounded-lg border border-gray-700 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-400 transition-all duration-200"
-              >
-                <option value="">All Time</option>
-                <option value="today">Today</option>
-                <option value="yesterday">Yesterday</option>
-                <option value="last7days">Last 7 Days</option>
-                <option value="last30days">Last 30 Days</option>
-              </select>
+            {/* Search & Filters */}
+            <div className="flex flex-col w-full md:flex-row items-end gap-4 mb-6">
+              <form onSubmit={handleSearch} className="relative w-full md:w-2/3">
+                <input
+                  type="text"
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                  className="w-full rounded-full bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 py-3 px-5 pl-12 shadow-md focus:ring-2 focus:ring-blue-500 focus:outline-none transition"
+                  placeholder="Search news..."
+                />
+                <button type="submit" className="absolute right-4 top-1/2 transform -translate-y-1/2 bg-blue-500 text-white px-4 py-1.5 rounded-full hover:bg-blue-600 transition">
+                  Search
+                </button>
+                <span className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-500 dark:text-gray-400">
+                  🔍
+                </span>
+              </form>
+              
+              {/* Filters */}
+              <div className="flex gap-6">
+                <select
+                  id="language-filter"
+                  value={language}
+                  onChange={handleLanguageChange}
+                  className="bg-gray-800 text-gray-300 p-2.5 rounded-lg border border-gray-700 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-400 transition-all duration-200"
+                >
+                  <option value="en">English</option>
+                  <option value="hi">Hindi</option>
+                  <option value="mr">Marathi</option>
+                  <option value="ta">Tamil</option>
+                  <option value="te">Telugu</option>
+                  <option value="ml">Malayalam</option>
+                  <option value="kn">Kannada</option>
+                  <option value="pa">Punjabi</option>
+                  <option value="bn">Bengali</option>
+                  <option value="gu">Gujarati</option>
+                </select>
+                <select
+                  id="date-filter"
+                  value={dateFilter}
+                  onChange={handleDateChange}
+                  className="bg-gray-800 text-gray-300 p-2.5 rounded-lg border border-gray-700 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-400 transition-all duration-200"
+                >
+                  <option value="">All Time</option>
+                  <option value="today">Today</option>
+                  <option value="yesterday">Yesterday</option>
+                  <option value="last7days">Last 7 Days</option>
+                  <option value="last30days">Last 30 Days</option>
+                </select>
+              </div>
+            </div>
+            <h2 className="text-gray-300 text-3xl mt-6 mb-8 font-bold tracking-tight text-center">
+              Latest News
+            </h2>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-10 justify-items-center">
+              {articles.length > 0 ? (
+                articles.map((article, index) => (
+                  <NewsCard key={index} article={article} />
+                ))
+              ) : (
+                <p className="text-gray-500 text-center col-span-full">
+                  No articles available for your search or selected filters.
+                </p>
+              )}
             </div>
           </div>
-          <h2 className="text-gray-300 text-3xl mt-6 mb-8 font-bold tracking-tight text-center">
-            Latest News
-          </h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-10 justify-items-center">
-            {articles.length > 0 ? (
-              articles.map((article, index) => (
-                <NewsCard key={index} article={article} />
-              ))
-            ) : (
-              <p className="text-gray-500 text-center col-span-full">
-                No articles available for your search or selected filters.
-              </p>
-            )}
-          </div>
-        </div>
-        
-        {/* Pagination Controls */}
-        {filteredArticles.length > articlesPerPage && (
-          <div className="mt-10 flex justify-center">
-            <nav className="flex items-center">
-              <button
-                onClick={() => paginate(currentPage > 1 ? currentPage - 1 : 1)}
-                disabled={currentPage === 1}
-                className={`mx-1 px-3 py-2 rounded-md ${
-                  currentPage === 1
-                    ? "bg-gray-700 text-gray-400 cursor-not-allowed"
-                    : "bg-gray-800 text-gray-300 hover:bg-gray-700 cursor-pointer"
-                }`}
-              >
-                Previous
-              </button>
-              
-              {pageNumbers.map(number => (
+          
+          {/* Pagination Controls */}
+          {filteredArticles.length > articlesPerPage && (
+            <div className="mt-10 flex justify-center">
+              <nav className="flex items-center">
                 <button
-                  key={number}
-                  onClick={() => paginate(number)}
-                  className={`mx-1 px-4 py-2 rounded-md cursor-pointer ${
-                    currentPage === number
-                      ? "bg-blue-600 text-white"
-                      : "bg-gray-800 text-gray-300 hover:bg-gray-700"
+                  onClick={() => paginate(currentPage > 1 ? currentPage - 1 : 1)}
+                  disabled={currentPage === 1}
+                  className={`mx-1 px-3 py-2 rounded-md ${
+                    currentPage === 1
+                      ? "bg-gray-700 text-gray-400 cursor-not-allowed"
+                      : "bg-gray-800 text-gray-300 hover:bg-gray-700 cursor-pointer"
                   }`}
                 >
-                  {number}
+                  Previous
                 </button>
-              ))}
-              
-              <button
-                onClick={() => paginate(currentPage < totalPages ? currentPage + 1 : totalPages)}
-                disabled={currentPage === totalPages || totalPages === 0}
-                className={`mx-1 px-3 py-2 rounded-md ${
-                  currentPage === totalPages || totalPages === 0
-                    ? "bg-gray-700 text-gray-400 cursor-not-allowed"
-                    : "bg-gray-800 text-gray-300 hover:bg-gray-700 cursor-pointer"
-                }`}
-              >
-                Next
-              </button>
-            </nav>
-          </div>
-        )}
-        
-      </div>
-      <Footer />
-    </>
-  );
+                
+                {pageNumbers.map(number => (
+                  <button
+                    key={number}
+                    onClick={() => paginate(number)}
+                    className={`mx-1 px-4 py-2 rounded-md cursor-pointer ${
+                      currentPage === number
+                        ? "bg-blue-600 text-white"
+                        : "bg-gray-800 text-gray-300 hover:bg-gray-700"
+                    }`}
+                  >
+                    {number}
+                  </button>
+                ))}
+                
+                <button
+                  onClick={() => paginate(currentPage < totalPages ? currentPage + 1 : totalPages)}
+                  disabled={currentPage === totalPages || totalPages === 0}
+                  className={`mx-1 px-3 py-2 rounded-md ${
+                    currentPage === totalPages || totalPages === 0
+                      ? "bg-gray-700 text-gray-400 cursor-not-allowed"
+                      : "bg-gray-800 text-gray-300 hover:bg-gray-700 cursor-pointer"
+                  }`}
+                >
+                  Next
+                </button>
+              </nav>
+            </div>
+          )}
+        </div>
+        <Footer />
+      </>
+    );
+  
 };
 
 export default LatestNews;
