@@ -6,6 +6,7 @@ import { useDispatch } from "react-redux";
 import { setUser } from "../redux/userSlice";
 
 
+
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -33,7 +34,7 @@ const Login = () => {
       if (response.data.message === "Login Successfull") {
         localStorage.setItem("token", response.data.token);
         dispatch(setUser(response.data.user));
-        navigate("/sources");
+        navigate("/home");
       }
     } catch (error) {
       setError(error.response?.data?.error || "Login Failed");

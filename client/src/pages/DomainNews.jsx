@@ -2,8 +2,9 @@ import React, { useEffect, useState } from "react";
 import NewsCard from "../components/NewsCard";
 import { useLocation } from "react-router-dom";
 import axios from "axios";
-
 import Sidebar from "../components/Sidebar";
+import Footer from "../components/Footer";
+import Navbar from "../components/Navbar";
 
 const API_URL = import.meta.env.VITE_API_BACKEND_URL;
 
@@ -41,15 +42,12 @@ const DomainNews = () => {
 
       const results = response.data?.results || [];
       
-      // If it's the first page, replace all articles
-      // If it's a subsequent page, append the new articles
       if (page === 1) {
         setArticles(results);
       } else {
         setArticles(prevArticles => [...prevArticles, ...results]);
       }
       
-      // Check if we have no articles and set an appropriate reason
       if (results.length === 0 && page === 1) {
         if (dateFilter) {
           setNoArticlesReason(`No articles available for the selected time period.`);
@@ -81,13 +79,11 @@ const DomainNews = () => {
 
     try {
       if (!term) {
-        // If search term is empty, fetch regular domain news with current filters
         await fetchNews();
       } else {
-        // Search with term and apply filters
         const params = { 
           searchWord: term,
-          domain: domain // Add domain to search parameters
+          domain: domain
         };
         
         if (dateFilter) params.date = dateFilter;
@@ -103,7 +99,6 @@ const DomainNews = () => {
         const results = response.data.results || [];
         setArticles(results);
         
-        // Check if we have no articles and set an appropriate reason for search
         if (results.length === 0) {
           setNoArticlesReason(`No search results found for "${term}".`);
         }
@@ -122,8 +117,8 @@ const DomainNews = () => {
 
   if (loading && page === 1) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-blue-50 to-gray-100 flex items-center justify-center">
-        <p className="text-gray-700 text-lg font-semibold animate-pulse">
+      <div className="min-h-screen bg-gray-900 flex items-center justify-center">
+        <p className="text-gray-300 text-lg font-semibold animate-pulse">
           Loading news articles...
         </p>
       </div>
@@ -132,79 +127,76 @@ const DomainNews = () => {
 
   if (error && articles.length === 0) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-blue-50 to-gray-100 flex items-center justify-center">
-        <p className="text-red-500 text-lg font-semibold">Error: {error}</p>
+      <div className="min-h-screen bg-gray-900 flex items-center justify-center">
+        <p className="text-red-400 text-lg font-semibold">Error: {error}</p>
       </div>
     );
   }
 
   return (
-    <div className="flex flex-col min-h-screen bg-gradient-to-br from-blue-50 to-gray-100">
-      <Sidebar></Sidebar>
-      <div className="container mx-auto px-4 py-6">
-        {/* Search and Filter Section */}
-        <div className="flex flex-col justify-end w-full  md:flex-row items-end gap-4 mb-6">
-          <form onSubmit={handleSearch} className="relative w-full md:w-2/3">
-            <input
-              type="text"
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full rounded-full bg-white dark:bg-gray-800 text-white border border-gray-300 dark:border-gray-700 py-3 px-5 pl-12 shadow-md focus:ring-2 focus:ring-blue-500 focus:outline-none transition"
-              placeholder="Search news..."
-            />
-            <button 
-              type="submit" 
-              className="absolute right-4 top-1/2 transform -translate-y-1/2 bg-blue-500 text-white px-4 py-1.5 rounded-full hover:bg-blue-600 transition"
-            >
-              Search
-            </button>
-            <span className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-500 dark:text-gray-400">
-              🔍
-            </span>
-          </form>
-          
-          {/* Date Filter Only */}
-          <div className="flex flex-end gap-4">
-            <select
-              id="date-filter"
-              value={dateFilter}
-              onChange={handleDateChange}
-              className="bg-gray-800 text-gray-300 p-2.5 rounded-lg border border-gray-700 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-400 transition-all duration-200"
-            >
-              <option value="">All Time</option>
-              <option value="today">Today</option>
-              <option value="yesterday">Yesterday</option>
-              <option value="last7days">Last 7 Days</option>
-              <option value="last30days">Last 30 Days</option>
-            </select>
+    <>
+      <Sidebar />
+      <Navbar />
+      <div className="min-h-screen bg-gray-900 p-10 text-white">
+        <div className="max-w-7xl mx-auto">
+          {/* Search & Filters */}
+          <div className="flex flex-col w-full mt-[-60px] md:flex-row items-end gap-4 mb-6">
+            <form onSubmit={handleSearch} className="relative w-full md:w-2/3">
+              <input
+                type="text"
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="w-full rounded-full bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 py-3 px-5 pl-12 shadow-md focus:ring-2 focus:ring-blue-500 focus:outline-none transition"
+                placeholder="Search news..."
+              />
+              <button 
+                type="submit" 
+                className="absolute right-4 top-1/2 transform -translate-y-1/2 bg-blue-500 text-white px-4 py-1.5 rounded-full hover:bg-blue-600 transition"
+              >
+                Search
+              </button>
+              <span className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-500 dark:text-gray-400">
+                🔍
+              </span>
+            </form>
+            
+            {/* Date Filter */}
+            <div className="flex ml-40 flex-end gap-6">
+              <select
+                id="date-filter"
+                value={dateFilter}
+                onChange={handleDateChange}
+                className="bg-gray-800 text-gray-300 p-2.5 rounded-lg border border-gray-700 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-400 transition-all duration-200"
+              >
+                <option value="">All Time</option>
+                <option value="today">Today</option>
+                <option value="yesterday">Yesterday</option>
+                <option value="last7days">Last 7 Days</option>
+                <option value="last30days">Last 30 Days</option>
+              </select>
+            </div>
           </div>
-        </div>
 
-        {/* News Section */}
-        <div className="bg-gradient-to-br from-blue-50 to-gray-100 p-4">
-          {/* Latest News Header */}
-          <h2 className="text-gray-800 text-3xl mt-4 mb-8 font-bold tracking-tight text-center">
+          {/* News Section */}
+          <h2 className="text-gray-300 text-3xl mt-6 mb-8 font-bold tracking-tight text-center">
             Latest News by {name || domain}
           </h2>
           
-          {/* News Grid */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-10 justify-items-center">
             {articles?.length > 0 ? (
               articles.map((article, index) => (
                 <NewsCard key={`${article.id || index}`} article={article} />
               ))
             ) : (
-              <div className="text-center col-span-full py-8">
-                <p className="text-gray-600 text-lg mb-3">
-                  {noArticlesReason}
-                </p>
-              </div>
+              <p className="text-gray-500 text-center col-span-full">
+                {noArticlesReason}
+              </p>
             )}
           </div>
           
           {/* Load More Button */}
           {articles.length > 0 && !loading && (
-            <div className="flex justify-center mt-8">
+            <div className="mt-10 flex justify-center">
               <button
                 onClick={handleLoadMore}
                 className="px-6 py-2 bg-blue-600 text-white rounded-full hover:bg-blue-700 transition-colors duration-300 shadow-md"
@@ -216,13 +208,14 @@ const DomainNews = () => {
           
           {/* Loading indicator for pagination */}
           {loading && page > 1 && (
-            <div className="text-center mt-4">
-              <p className="text-gray-600 animate-pulse">Loading more articles...</p>
+            <div className="mt-4 text-center">
+              <p className="text-gray-300 animate-pulse">Loading more articles...</p>
             </div>
           )}
         </div>
       </div>
-    </div>
+      <Footer />
+    </>
   );
 };
 
