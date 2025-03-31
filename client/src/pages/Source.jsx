@@ -13,7 +13,7 @@ const Source = () => {
   const [error, setError] = useState(null);
   const [language, setLanguage] = useState("en");
   const [searchTerm, setSearchTerm] = useState("");
-  const [dateFilter, setDateFilter] = useState("");
+ 
   
   // Pagination state
   const [currentPage, setCurrentPage] = useState(1);
@@ -60,32 +60,7 @@ const Source = () => {
     }
     
     // Filter by date if selected
-    if (dateFilter) {
-      const now = new Date();
-      const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-      
-      results = results.filter(article => {
-        const pubDate = article.pubDate ? new Date(article.pubDate) : null;
-        if (!pubDate) return false;
-        
-        switch (dateFilter) {
-          case 'today':
-            return pubDate >= today;
-          case 'yesterday': {
-            const yesterday = new Date(today);
-            yesterday.setDate(yesterday.getDate() - 1);
-            return pubDate >= yesterday && pubDate < today;
-          }
-          case 'last7days': {
-            const last7Days = new Date(today);
-            last7Days.setDate(last7Days.getDate() - 7);
-            return pubDate >= last7Days;
-          }
-          default:
-            return true;
-        }
-      });
-    }
+   
     
     return results;
   };
@@ -143,7 +118,7 @@ const Source = () => {
           </h2>
 
           {/* Search & Filters */}
-          <div className="flex flex-col md:flex-row items-center gap-4 mb-6">
+          <div className="flex flex-col md:flex-row items-center gap-8 mb-6">
             <form onSubmit={handleSearch} className="relative w-full md:w-2/3">
               <input
                 type="text"
@@ -161,27 +136,18 @@ const Source = () => {
             </form>
             
             {/* Filters */}
-            <div className="flex gap-4">
+            <div className="flex  gap-4">
               <select
                 value={language}
                 onChange={(e) => setLanguage(e.target.value)}
-                className="bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 p-2 rounded-md shadow-sm focus:ring-blue-500 focus:outline-none transition"
+                className="bg-white w-40  dark:bg-gray-800 border border-gray-300 dark:border-gray-700 p-2 rounded-md shadow-sm focus:ring-blue-500 focus:outline-none transition"
               >
                 <option value="en">English</option>
                 <option value="hi">Hindi</option>
                 <option value="mr">Marathi</option>
                 <option value="ta">Tamil</option>
               </select>
-              <select
-                value={dateFilter}
-                onChange={handleDateFilterChange}
-                className="bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 p-2 rounded-md shadow-sm focus:ring-blue-500 focus:outline-none transition"
-              >
-                <option value="">All Time</option>
-                <option value="today">Today</option>
-                <option value="yesterday">Yesterday</option>
-                <option value="last7days">Last 7 Days</option>
-              </select>
+              
             </div>
           </div>
 
