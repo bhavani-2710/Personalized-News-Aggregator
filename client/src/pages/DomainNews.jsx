@@ -137,10 +137,10 @@ const DomainNews = () => {
     <>
       <Sidebar />
       <Navbar />
-      <div className="min-h-screen bg-gray-900 p-10 text-white">
+      <div className="min-h-screen bg-gray-900 p-10  text-white">
         <div className="max-w-7xl mx-auto">
           {/* Search & Filters */}
-          <div className="flex flex-col w-full mt-[-60px] md:flex-row items-end gap-4 mb-6">
+          <div className="flex flex-col w-full  md:flex-row items-end gap-2 mb-6">
             <form onSubmit={handleSearch} className="relative w-full md:w-2/3">
               <input
                 type="text"
