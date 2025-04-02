@@ -94,7 +94,7 @@ const Register = () => {
       {/* Back Button */}
         <button 
               onClick={() => navigate("/")} 
-              className="absolute top-6 left-6 flex items-center space-x-2 text-gray-700 bg-white shadow-md hover:shadow-lg rounded-lg px-4 py-2 transition-all duration-300 ease-in-out"
+              className="absolute top-6 left-6 flex items-center space-x-2 text-gray-700 bg-white shadow-md hover:cursor-pointer hover:shadow-lg rounded-lg px-4 py-2 transition-all duration-300 ease-in-out"
             >
               <FaArrowLeft className="mr-2" />
               <span className="font-medium">Back to Home</span>
