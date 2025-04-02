@@ -34,12 +34,12 @@ const Navbar = () => {
 
               {/* Logo Section */}
               <div className="flex flex-1 items-center justify-start">
-                <img
+                {/* <img
                   src="https://cdn-icons-png.flaticon.com/512/1146/1146884.png"
                   alt="News Logo"
                   className="h-12 w-12 mr-3"
-                />
-                <h1 className="text-2xl font-extrabold text-white tracking-wide">WorldNews 24/7</h1>
+                /> */}
+                <h1 className="text-2xl font-extrabold text-white tracking-wide">NewsHub</h1>
               </div>
 
              
