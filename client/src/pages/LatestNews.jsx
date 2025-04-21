@@ -151,16 +151,16 @@ const LatestNews = () => {
 
   if (loading)
     return (
-      <div className="min-h-screen bg-gray-900 flex items-center justify-center">
-        <p className="text-gray-300 text-lg font-semibold animate-pulse">
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <p className="text-gray-700 text-lg font-semibold animate-pulse">
           Loading news articles...
         </p>
       </div>
     );
   if (error)
     return (
-      <div className="min-h-screen bg-gray-900 flex items-center justify-center">
-        <p className="text-red-400 text-lg font-semibold">Error: {error}</p>
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <p className="text-red-600 text-lg font-semibold">Error: {error}</p>
       </div>
     );
 
@@ -168,7 +168,7 @@ const LatestNews = () => {
       <>
         <Sidebar />
         <Navbar/>
-        <div className="min-h-screen bg-gray-900 p-10 text-white">
+        <div className="min-h-screen bg-gray-50 p-10 text-gray-800">
           <div className="max-w-7xl mx-auto">
             
             {/* Search & Filters */}
@@ -178,13 +178,13 @@ const LatestNews = () => {
                   type="text"
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
-                  className="w-full rounded-full bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 py-3 px-5 pl-12 shadow-md focus:ring-2 focus:ring-blue-500 focus:outline-none transition"
+                  className="w-full rounded-full bg-white border border-gray-300 py-3 px-5 pl-12 shadow-md focus:ring-2 focus:ring-blue-500 focus:outline-none transition"
                   placeholder="Search news..."
                 />
                 <button type="submit" className="absolute right-4 top-1/2 transform -translate-y-1/2 bg-blue-500 text-white px-4 py-1.5 rounded-full hover:bg-blue-600 transition">
                   Search
                 </button>
-                <span className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-500 dark:text-gray-400">
+                <span className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-500">
                   🔍
                 </span>
               </form>
@@ -195,7 +195,7 @@ const LatestNews = () => {
                   id="language-filter"
                   value={language}
                   onChange={handleLanguageChange}
-                  className="bg-gray-800 text-gray-300 p-2.5 rounded-lg border border-gray-700 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-400 transition-all duration-200"
+                  className="bg-white text-gray-700 p-2.5 rounded-lg border border-gray-300 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-400 transition-all duration-200"
                 >
                   <option value="en">English</option>
                   <option value="hi">Hindi</option>
@@ -212,7 +212,7 @@ const LatestNews = () => {
                   id="date-filter"
                   value={dateFilter}
                   onChange={handleDateChange}
-                  className="bg-gray-800 text-gray-300 p-2.5 rounded-lg border border-gray-700 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-400 transition-all duration-200"
+                  className="bg-white text-gray-700 p-2.5 rounded-lg border border-gray-300 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-400 transition-all duration-200"
                 >
                   <option value="">All Time</option>
                   <option value="today">Today</option>
@@ -222,7 +222,7 @@ const LatestNews = () => {
                 </select>
               </div>
             </div>
-            <h2 className="text-gray-300 text-3xl mt-6 mb-8 font-bold tracking-tight text-center">
+            <h2 className="text-gray-800 text-3xl mt-6 mb-8 font-bold tracking-tight text-center">
               Latest News
             </h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-10 justify-items-center">
@@ -247,8 +247,8 @@ const LatestNews = () => {
                   disabled={currentPage === 1}
                   className={`mx-1 px-3 py-2 rounded-md ${
                     currentPage === 1
-                      ? "bg-gray-700 text-gray-400 cursor-not-allowed"
-                      : "bg-gray-800 text-gray-300 hover:bg-gray-700 cursor-pointer"
+                      ? "bg-gray-200 text-gray-400 cursor-not-allowed"
+                      : "bg-white text-gray-700 hover:bg-gray-100 cursor-pointer border border-gray-300"
                   }`}
                 >
                   Previous
@@ -260,8 +260,8 @@ const LatestNews = () => {
                     onClick={() => paginate(number)}
                     className={`mx-1 px-4 py-2 rounded-md cursor-pointer ${
                       currentPage === number
-                        ? "bg-blue-600 text-white"
-                        : "bg-gray-800 text-gray-300 hover:bg-gray-700"
+                        ? "bg-blue-500 text-white"
+                        : "bg-white text-gray-700 hover:bg-gray-100 border border-gray-300"
                     }`}
                   >
                     {number}
@@ -273,8 +273,8 @@ const LatestNews = () => {
                   disabled={currentPage === totalPages || totalPages === 0}
                   className={`mx-1 px-3 py-2 rounded-md ${
                     currentPage === totalPages || totalPages === 0
-                      ? "bg-gray-700 text-gray-400 cursor-not-allowed"
-                      : "bg-gray-800 text-gray-300 hover:bg-gray-700 cursor-pointer"
+                      ? "bg-gray-200 text-gray-400 cursor-not-allowed"
+                      : "bg-white text-gray-700 hover:bg-gray-100 cursor-pointer border border-gray-300"
                   }`}
                 >
                   Next

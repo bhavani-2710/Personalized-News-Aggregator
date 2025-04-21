@@ -15,7 +15,7 @@ function classNames(...classes) {
 
 const Navbar = () => {
   return (
-    <Disclosure as="nav" className="bg-gray-900 shadow-lg text-white">
+    <Disclosure as="nav" className="bg-blue-900 shadow-lg text-white">
       {({ open }) => (
         <>
           <div className="mx-auto px-6 sm:px-10 lg:px-16">
@@ -39,7 +39,7 @@ const Navbar = () => {
                   alt="News Logo"
                   className="h-12 w-12 mr-3"
                 /> */}
-                <h1 className="text-2xl font-extrabold text-white tracking-wide">NewsHub</h1>
+                <h1 className="text-2xl font-extrabold text-white p-4 tracking-wide">NewsHub</h1>
               </div>
 
              

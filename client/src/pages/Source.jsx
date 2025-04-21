@@ -7,17 +7,16 @@ import Footer from "../components/Footer";
 const API_URL = import.meta.env.VITE_API_BACKEND_URL;
 
 const Source = () => {
-  const [allArticles, setAllArticles] = useState([]); // Store all fetched articles
-  const [filteredArticles, setFilteredArticles] = useState([]); // Store filtered articles for display
+  const [allArticles, setAllArticles] = useState([]);
+  const [filteredArticles, setFilteredArticles] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [language, setLanguage] = useState("en");
   const [searchTerm, setSearchTerm] = useState("");
- 
   
   // Pagination state
   const [currentPage, setCurrentPage] = useState(1);
-  const [articlesPerPage] = useState(12); // 6 cards looks good in a 3-column grid
+  const [articlesPerPage] = useState(12);
 
   useEffect(() => {
     const fetchSources = async () => {
@@ -29,7 +28,7 @@ const Source = () => {
 
         setAllArticles(res.data);
         setFilteredArticles(res.data);
-        setCurrentPage(1); // Reset to first page when new data is loaded
+        setCurrentPage(1);
       } catch (err) {
         setError(err.message || "Something went wrong while fetching news sources.");
       } finally {
@@ -43,12 +42,9 @@ const Source = () => {
   const filterArticles = () => {
     let results = [...allArticles];
     
-    // Filter by search term if one exists
     if (searchTerm.trim()) {
-      // Split the search terms by spaces to handle multi-word searches
       const terms = searchTerm.trim().toLowerCase().split(/\s+/);
       
-      // Filter articles that match ALL terms (not necessarily as a single phrase)
       results = results.filter(article => 
         terms.every(term => 
           (article.title && article.title.toLowerCase().includes(term)) ||
@@ -59,9 +55,6 @@ const Source = () => {
       );
     }
     
-    // Filter by date if selected
-   
-    
     return results;
   };
 
@@ -70,25 +63,12 @@ const Source = () => {
     e.preventDefault();
     const results = filterArticles();
     setFilteredArticles(results);
-    setCurrentPage(1); // Reset to first page after new search
+    setCurrentPage(1);
   };
   
-  // Handle search input change with debounce
+  // Handle search input change
   const handleSearchChange = (e) => {
     setSearchTerm(e.target.value);
-  };
-  
-  // Handle date filter change
-  const handleDateFilterChange = (e) => {
-    setDateFilter(e.target.value);
-    // Apply filters immediately when date changes
-    setSearchTerm(prevTerm => {
-      setTimeout(() => {
-        setFilteredArticles(filterArticles());
-        setCurrentPage(1);
-      }, 0);
-      return prevTerm;
-    });
   };
   
   // Get current articles for pagination
@@ -109,7 +89,7 @@ const Source = () => {
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
   return (
-    <div className="flex flex-col min-h-screen bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-gray-200">
+    <div className="flex flex-col min-h-screen bg-gray-50 text-gray-900">
       <Sidebar />
       <div className="flex-1 p-6">
         <div className="max-w-7xl mx-auto">
@@ -124,30 +104,29 @@ const Source = () => {
                 type="text"
                 value={searchTerm}
                 onChange={handleSearchChange}
-                className="w-full rounded-full bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 py-3 px-5 pl-12 shadow-md focus:ring-2 focus:ring-blue-500 focus:outline-none transition"
+                className="w-full rounded-full bg-white border border-gray-300 py-3 px-5 pl-12 shadow-md focus:ring-2 focus:ring-blue-500 focus:outline-none transition"
                 placeholder="Search within sources..."
               />
               <button type="submit" className="absolute right-4 top-1/2 transform -translate-y-1/2 bg-blue-500 text-white px-4 py-1.5 rounded-full hover:bg-blue-600 transition">
                 Search
               </button>
-              <span className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-500 dark:text-gray-400">
+              <span className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-500">
                 🔍
               </span>
             </form>
             
-            {/* Filters */}
-            <div className="flex  gap-4">
+            {/* Language Filter */}
+            <div className="flex gap-4">
               <select
                 value={language}
                 onChange={(e) => setLanguage(e.target.value)}
-                className="bg-white w-40  dark:bg-gray-800 border border-gray-300 dark:border-gray-700 p-2 rounded-md shadow-sm focus:ring-blue-500 focus:outline-none transition"
+                className="bg-white w-40 border border-gray-300 p-2 rounded-md shadow-sm focus:ring-blue-500 focus:outline-none transition"
               >
                 <option value="en">English</option>
                 <option value="hi">Hindi</option>
                 <option value="mr">Marathi</option>
                 <option value="ta">Tamil</option>
               </select>
-              
             </div>
           </div>
 
@@ -173,8 +152,8 @@ const Source = () => {
                       disabled={currentPage === 1}
                       className={`mx-1 px-3 py-2 rounded-md transition-colors ${
                         currentPage === 1
-                          ? "bg-gray-300 dark:bg-gray-700 text-gray-500 dark:text-gray-400 cursor-not-allowed"
-                          : "bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700 border border-gray-300 dark:border-gray-700"
+                          ? "bg-gray-200 text-gray-400 cursor-not-allowed"
+                          : "bg-white text-gray-700 hover:bg-gray-100 border border-gray-300"
                       }`}
                     >
                       Previous
@@ -187,7 +166,7 @@ const Source = () => {
                         className={`mx-1 px-4 py-2 rounded-md transition-colors ${
                           currentPage === number
                             ? "bg-blue-500 text-white"
-                            : "bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700 border border-gray-300 dark:border-gray-700"
+                            : "bg-white text-gray-700 hover:bg-gray-100 border border-gray-300"
                         }`}
                       >
                         {number}
@@ -199,8 +178,8 @@ const Source = () => {
                       disabled={currentPage === totalPages}
                       className={`mx-1 px-3 py-2 rounded-md transition-colors ${
                         currentPage === totalPages
-                          ? "bg-gray-300 dark:bg-gray-700 text-gray-500 dark:text-gray-400 cursor-not-allowed"
-                          : "bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700 border border-gray-300 dark:border-gray-700"
+                          ? "bg-gray-200 text-gray-400 cursor-not-allowed"
+                          : "bg-white text-gray-700 hover:bg-gray-100 border border-gray-300"
                       }`}
                     >
                       Next
@@ -210,7 +189,7 @@ const Source = () => {
               )}
               
               {/* Pagination info */}
-              <div className="mt-4 text-center text-gray-600 dark:text-gray-400">
+              <div className="mt-4 text-center text-gray-600">
                 <p>
                   Showing {filteredArticles.length === 0 ? 0 : indexOfFirstArticle + 1}-
                   {indexOfLastArticle > filteredArticles.length ? filteredArticles.length : indexOfLastArticle} of {filteredArticles.length} sources
@@ -219,7 +198,7 @@ const Source = () => {
               </div>
             </>
           ) : (
-            <p className="text-center text-lg bg-white dark:bg-gray-800 p-6 rounded-lg shadow-lg">
+            <p className="text-center text-lg bg-white p-6 rounded-lg shadow-lg">
               {allArticles.length > 0 ? 
                 "No sources match your search criteria." : 
                 "No news sources available."

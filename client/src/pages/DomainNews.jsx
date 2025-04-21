@@ -117,8 +117,8 @@ const DomainNews = () => {
 
   if (loading && page === 1) {
     return (
-      <div className="min-h-screen bg-gray-900 flex items-center justify-center">
-        <p className="text-gray-300 text-lg font-semibold animate-pulse">
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <p className="text-gray-600 text-lg font-semibold animate-pulse">
           Loading news articles...
         </p>
       </div>
@@ -127,8 +127,8 @@ const DomainNews = () => {
 
   if (error && articles.length === 0) {
     return (
-      <div className="min-h-screen bg-gray-900 flex items-center justify-center">
-        <p className="text-red-400 text-lg font-semibold">Error: {error}</p>
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <p className="text-red-600 text-lg font-semibold">Error: {error}</p>
       </div>
     );
   }
@@ -137,16 +137,16 @@ const DomainNews = () => {
     <>
       <Sidebar />
       <Navbar />
-      <div className="min-h-screen bg-gray-900 p-10  text-white">
+      <div className="min-h-screen bg-gray-50 p-10 text-gray-800">
         <div className="max-w-7xl mx-auto">
           {/* Search & Filters */}
-          <div className="flex flex-col w-full  md:flex-row items-end gap-2 mb-6">
+          <div className="flex flex-col w-full md:flex-row items-end gap-2 mb-6">
             <form onSubmit={handleSearch} className="relative w-full md:w-2/3">
               <input
                 type="text"
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full rounded-full bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 py-3 px-5 pl-12 shadow-md focus:ring-2 focus:ring-blue-500 focus:outline-none transition"
+                className="w-full rounded-full bg-white border border-gray-300 py-3 px-5 pl-12 shadow-md focus:ring-2 focus:ring-blue-500 focus:outline-none transition"
                 placeholder="Search news..."
               />
               <button 
@@ -155,7 +155,7 @@ const DomainNews = () => {
               >
                 Search
               </button>
-              <span className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-500 dark:text-gray-400">
+              <span className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-500">
                 🔍
               </span>
             </form>
@@ -166,7 +166,7 @@ const DomainNews = () => {
                 id="date-filter"
                 value={dateFilter}
                 onChange={handleDateChange}
-                className="bg-gray-800 text-gray-300 p-2.5 rounded-lg border border-gray-700 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-400 transition-all duration-200"
+                className="bg-white text-gray-700 p-2.5 rounded-lg border border-gray-300 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-400 transition-all duration-200"
               >
                 <option value="">All Time</option>
                 <option value="today">Today</option>
@@ -178,7 +178,7 @@ const DomainNews = () => {
           </div>
 
           {/* News Section */}
-          <h2 className="text-gray-300 text-3xl mt-6 mb-8 font-bold tracking-tight text-center">
+          <h2 className="text-gray-800 text-3xl mt-6 mb-8 font-bold tracking-tight text-center">
             Latest News by {name || domain}
           </h2>
           
@@ -209,7 +209,7 @@ const DomainNews = () => {
           {/* Loading indicator for pagination */}
           {loading && page > 1 && (
             <div className="mt-4 text-center">
-              <p className="text-gray-300 animate-pulse">Loading more articles...</p>
+              <p className="text-gray-600 animate-pulse">Loading more articles...</p>
             </div>
           )}
         </div>

@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
-import { Menu, Book, Clock, User, LogOut, Home, Bookmark } from "lucide-react";
+import { Menu, Book, Clock, User, LogOut, Home, Bookmark, X } from "lucide-react";
 import { NavLink, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { clearUser } from "../redux/userSlice";
@@ -24,6 +24,7 @@ const Sidebar = () => {
       }
     };
 
+    // Add event listener when sidebar is open
     if (isOpen) {
       document.addEventListener("mousedown", handleClickOutside);
     }
@@ -42,17 +43,25 @@ const Sidebar = () => {
           isOpen ? "translate-x-0" : "-translate-x-full"
         } w-72 z-50 border-r border-gray-800 p-6 flex flex-col`}
       >
-        <h2 className="text-3xl font-extrabold mb-8 text-blue-400">NewsHub</h2>
+        <div className="flex justify-between items-center mb-8">
+          <h2 className="text-3xl font-extrabold text-blue-400">NewsHub</h2>
+        </div>
+        
         <ul className="space-y-3 flex-grow">
           {["home", "sources", "latest-news", "saved"].map((item, index) => {
             const icons = [Home, Book, Clock, Bookmark];
             const labels = ["Home", "Sources", "Latest", "Saved"];
             const Icon = icons[index];
             return (
-              <NavLink key={item} to={`/${item}`} className={({ isActive }) =>
-                `flex items-center gap-4 p-4 rounded-lg transition-all duration-200 text-lg font-medium hover:bg-blue-600 hover:text-white ${
-                  isActive ? "bg-blue-600 text-white" : "text-gray-400"
-                }`}
+              <NavLink 
+                key={item} 
+                to={`/${item}`} 
+                onClick={() => setIsOpen(false)}
+                className={({ isActive }) =>
+                  `flex items-center gap-4 p-4 rounded-lg transition-all duration-200 text-lg font-medium hover:bg-blue-600 hover:text-white ${
+                    isActive ? "bg-blue-600 text-white" : "text-gray-400"
+                  }`
+                }
               >
                 <Icon className="w-6 h-6" />
                 <p>{labels[index]}</p>
@@ -80,13 +89,15 @@ const Sidebar = () => {
         </div>
       </div>
 
-      {/* Sidebar Toggle Button */}
-      <button
-        onClick={() => setIsOpen(true)}
-        className="fixed top-4 left-4 bg-white text-black p-2 rounded-full shadow-lg hover:bg-gray-200 focus:outline-none z-50 transition-all"
-      >
-        <Menu size={28} />
-      </button>
+      {/* Sidebar Toggle Button - hidden when sidebar is open */}
+      {!isOpen && (
+        <button
+          onClick={() => setIsOpen(true)}
+          className="fixed top-4 left-4 bg-white text-black p-2 rounded-full shadow-lg hover:bg-gray-200 focus:outline-none z-50 transition-all"
+        >
+          <Menu size={28} />
+        </button>
+      )}
     </div>
   );
 };

@@ -34,44 +34,44 @@ const SavedNews = () => {
   }, []);
 
   return (
-    <div className="flex flex-col min-h-screen bg-gray-900 text-white">
+    <div className="flex flex-col min-h-screen bg-gray-50 text-gray-800">
       <Navbar />
       <div className="flex flex-1">
         <Sidebar />
-        <div className="flex-1 bg-gradient-to-br from-gray-800 to-gray-900 p-8">
+        <div className="flex-1 bg-gradient-to-br from-white to-gray-100 p-8">
           <div className="w-full max-w-7xl mx-auto flex flex-col gap-12">
             {/* Visited News Section */}
             <section>
-              <h2 className="text-4xl font-bold text-blue-400 mb-6 border-b-2 border-blue-500 pb-3">
+              <h2 className="text-4xl font-bold text-blue-600 mb-6 border-b-2 border-blue-400 pb-3">
                 Saved News
               </h2>
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                 {loading ? (
                   <p className="text-center text-lg">Loading saved news...</p>
                 ) : error ? (
-                  <div className="text-red-400 bg-red-900 p-4 rounded-lg text-center">Error: {error}</div>
+                  <div className="text-red-700 bg-red-100 p-4 rounded-lg text-center">Error: {error}</div>
                 ) : visitedNews.length > 0 ? (
                   visitedNews.map((article, index) => <NewsCard key={index} article={article} />)
                 ) : (
-                  <p className="text-center text-lg text-gray-400">No visited news available.</p>
+                  <p className="text-center text-lg text-gray-500">No saved news available.</p>
                 )}
               </div>
             </section>
 
             {/* Visited Sources Section */}
             <section>
-              <h2 className="text-4xl font-bold text-blue-400 mb-6 border-b-2 border-blue-500 pb-3">
+              <h2 className="text-4xl font-bold text-blue-600 mb-6 border-b-2 border-blue-400 pb-3">
                 Saved Sources
               </h2>
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                 {loading ? (
                   <p className="text-center text-lg">Loading sources...</p>
                 ) : error ? (
-                  <div className="text-red-400 bg-red-900 p-4 rounded-lg text-center">Error: {error}</div>
+                  <div className="text-red-700 bg-red-100 p-4 rounded-lg text-center">Error: {error}</div>
                 ) : visitedSources.length > 0 ? (
                   visitedSources.map((source, index) => <Card key={index} article={source} />)
                 ) : (
-                  <p className="text-center text-lg text-gray-400">No visited sources available.</p>
+                  <p className="text-center text-lg text-gray-500">No saved sources available.</p>
                 )}
               </div>
             </section>
