@@ -163,7 +163,7 @@ const Source = () => {
                       <button
                         key={number}
                         onClick={() => paginate(number)}
-                        className={`mx-1 px-4 py-2 rounded-md transition-colors ${
+                        className={`mx-1 px-4 py-2 rounded-md transition-colors cursor-pointer ${
                           currentPage === number
                             ? "bg-blue-500 text-white"
                             : "bg-white text-gray-700 hover:bg-gray-100 border border-gray-300"
