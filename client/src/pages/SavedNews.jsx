@@ -43,7 +43,7 @@ const SavedNews = () => {
             {/* Visited News Section */}
             <section>
               <h2 className="text-4xl font-bold text-blue-400 mb-6 border-b-2 border-blue-500 pb-3">
-                Visited News
+                Saved News
               </h2>
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                 {loading ? (
@@ -61,7 +61,7 @@ const SavedNews = () => {
             {/* Visited Sources Section */}
             <section>
               <h2 className="text-4xl font-bold text-blue-400 mb-6 border-b-2 border-blue-500 pb-3">
-                Visited Sources
+                Saved Sources
               </h2>
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                 {loading ? (
