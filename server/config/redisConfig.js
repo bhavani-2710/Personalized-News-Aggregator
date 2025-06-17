@@ -12,7 +12,7 @@ const redisClient = Redis.createClient({
 });
 redisClient.on('error', err => console.log('Redis Client Error', err));
 
-redisClient.connect();
+redisClient.connect().then(() => console.log("🔴 Redis connected successfully!"));
 
 // Expected items and false positive rate
 const expectedItems = 1000; // Estimated number of departments queried
