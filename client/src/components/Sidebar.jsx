@@ -92,7 +92,7 @@ const Sidebar = () => {
             onClick={handleLogout}
             className="flex items-center justify-center gap-4 w-full bg-red-500 text-white p-4 rounded-lg hover:bg-red-600 transition-all duration-200 text-lg font-semibold shadow-md"
           >
-            <LogOut className="w-6 h-6" />
+            <LogOut className="w-6 h-6 cursor-pointer" />
             <span>Log Out</span>
           </button>
         </div>
